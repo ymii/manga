@@ -1,0 +1,55 @@
+{
+  "sceneId_0": [],
+  "sceneId_1": [
+    {
+      "itemId": 1,
+      "topPos": 620,
+      "leftPos": 0,
+      "imgSrc": "speech_bubble.png",
+      "imgWidth": 100,
+      "delayBeforeAppend": 1000,
+      "hasAnimation": false,
+      "allowOverlap": true
+    },
+    {
+      "itemId": 2,
+      "topPos": 650,
+      "leftPos": 50,
+      "imgSrc": "speech_bubble.png",
+      "imgWidth": 100,
+      "delayBeforeAppend": 1000,
+      "hasAnimation": false,
+      "allowOverlap": false
+    }
+  ],
+  "sceneId_2": [
+    {
+      "objectId": 3,
+      "topPos": 900,
+      "leftPos": 50,
+      "imgSrc": "speech_bubble.png",
+      "imgWidth": 150,
+      "delayBeforeAppend": 1000,
+      "hasAnimation": false,
+      "allowOverlap": true
+    }
+  ],
+  "sceneId_3": [
+    {
+      "itemId": 4,
+      "topPos": 1100,
+      "leftPos": 0,
+      "imgSrc": "square_pic.png",
+      "imgWidth": 350,
+      "imgHeight": 350,
+      "delayBeforeAppend": 0,
+      "hasAnimation": false,
+      "allowOverlap": true,
+      "animationType": "scaleUp",
+      "initialScale": 1,
+      "scaleTo": 1.5,
+      "animationDelay": 100,
+      "animationDuration": 3000
+    }
+  ]
+}
