@@ -1,0 +1,52 @@
+{
+  "scrollDownArray": [
+    {
+      "id": "sceneId_0",
+      "scrollDownVal": 600
+    },
+    {
+      "id": "sceneId_1",
+      "scrollDownVal": 200
+    },
+    {
+      "id": "sceneId_2",
+      "scrollDownVal": 300
+    },
+    {
+      "id": "sceneId_3",
+      "scrollDownVal": 1000
+    },
+    {
+      "id": "sceneId_4",
+      "scrollDownVal": 1200
+    },
+    {
+      "id": "sceneId_5",
+      "scrollDownVal": 100
+    },
+    {
+      "id": "sceneId_6",
+      "scrollDownVal": 800
+    },
+    {
+      "id": "sceneId_7",
+      "scrollDownVal": 600
+    },
+    {
+      "id": "sceneId_8",
+      "scrollDownVal": 300
+    },
+    {
+      "id": "sceneId_9",
+      "scrollDownVal": 1500
+    },
+    {
+      "id": "sceneId_10",
+      "scrollDownVal": 800
+    },
+    {
+      "id": "sceneId_11",
+      "scrollDownVal": 800
+    }
+  ]
+}
