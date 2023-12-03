@@ -43,7 +43,7 @@
       "imgWidth": 350,
       "imgHeight": 350,
       "delayBeforeAppend": 0,
-      "hasAnimation": false,
+      "hasAnimation": true,
       "allowOverlap": true,
       "animationType": "scaleUp",
       "initialScale": 1,
