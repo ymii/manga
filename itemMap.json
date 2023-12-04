@@ -49,7 +49,7 @@
       "animationType": "scaleUp",
       "initialScale": 1,
       "scaleTo": 1.5,
-      "animationDelay": 100,
+      "animationDelay": 500,
       "animationDuration": 3000
     }
   ]
