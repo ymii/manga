@@ -62,6 +62,15 @@
       "allowOverlap": false,
       "animationType": "static",
       "animationDelay": 0
+    },
+    {
+      "objectId": 6,
+      "topPos": 1300,
+      "leftPos": 250,
+      "imgSrc": "speech_bubble.png",
+      "imgWidth": 150,
+      "delayBeforeAppend": 1000,
+      "hasAnimation": false
     }
   ]
 }
