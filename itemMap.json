@@ -60,7 +60,7 @@
       "animationDuration": 2000,
       "allowOverlap": false,
       "animationType": "static",
-      "animationDelay": 1000
+      "animationDelay": 0
     },
     {
       "itemId": 6,
