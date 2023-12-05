@@ -8,8 +8,7 @@
       "imgSrc": "speech_bubble.png",
       "imgWidth": 100,
       "delayBeforeAppend": 1000,
-      "hasAnimation": false,
-      "allowOverlap": true
+      "hasAnimation": false
     },
     {
       "itemId": 2,
@@ -18,8 +17,7 @@
       "imgSrc": "speech_bubble.png",
       "imgWidth": 100,
       "delayBeforeAppend": 1000,
-      "hasAnimation": false,
-      "allowOverlap": false
+      "hasAnimation": false
     }
   ],
   "sceneId_2": [
@@ -30,8 +28,7 @@
       "imgSrc": "speech_bubble.png",
       "imgWidth": 150,
       "delayBeforeAppend": 1000,
-      "hasAnimation": false,
-      "allowOverlap": true
+      "hasAnimation": false
     }
   ],
   "sceneId_3": [
