@@ -39,31 +39,37 @@
     {
       "id": "sceneId_6",
       "scrollDownVal": 800,
+      "delayBeforeScroll": 200,
       "scrollSpeed": 1000
     },
     {
       "id": "sceneId_7",
       "scrollDownVal": 600,
+      "delayBeforeScroll": 200,
       "scrollSpeed": 2000
     },
     {
       "id": "sceneId_8",
       "scrollDownVal": 300,
+      "delayBeforeScroll": 200,
       "scrollSpeed": 500
     },
     {
       "id": "sceneId_9",
       "scrollDownVal": 1500,
+      "delayBeforeScroll": 200,
       "scrollSpeed": 500
     },
     {
       "id": "sceneId_10",
       "scrollDownVal": 800,
+      "delayBeforeScroll": 200,
       "scrollSpeed": 500
     },
     {
       "id": "sceneId_11",
       "scrollDownVal": 800,
+      "delayBeforeScroll": 200,
       "scrollSpeed": 1000
     }
   ]
