@@ -50,8 +50,7 @@
       "animationDuration": 3000
     },
     {
-      "objectId": 5,
-      "centerPos": false,
+      "itemId": 5,
       "topPos": 1200,
       "leftPos": 100,
       "imgSrc": "speech_bubble.png",
@@ -64,7 +63,7 @@
       "animationDelay": 0
     },
     {
-      "objectId": 6,
+      "itemId": 6,
       "topPos": 1300,
       "leftPos": 250,
       "imgSrc": "speech_bubble.png",
