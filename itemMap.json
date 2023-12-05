@@ -45,7 +45,7 @@
       "delayBeforeAppend": 0,
       "hasAnimation": true,
       "hasKeyFrames": false,
-      "allowOverlap": false,
+      "allowOverlap": true,
       "animationType": "scaleUp",
       "initialScale": 1,
       "scaleTo": 1.5,
