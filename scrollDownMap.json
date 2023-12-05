@@ -27,11 +27,13 @@
     {
       "id": "sceneId_4",
       "scrollDownVal": 1200,
+      "delayBeforeScroll": 200,
       "scrollSpeed": 500
     },
     {
       "id": "sceneId_5",
       "scrollDownVal": 100,
+      "delayBeforeScroll": 200,
       "scrollSpeed": 500
     },
     {
