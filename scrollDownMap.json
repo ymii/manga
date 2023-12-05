@@ -3,7 +3,7 @@
     {
       "id": "sceneId_0",
       "scrollDownVal": 600,
-      "delayBeforeScroll": 200,
+      "delayBeforeScroll": 2000,
       "scrollSpeed": 500
     },
     {
