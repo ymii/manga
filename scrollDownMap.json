@@ -3,12 +3,12 @@
     {
       "id": "sceneId_0",
       "scrollDownVal": 600,
-      "scrollSpeed": 1000
+      "scrollSpeed": 500
     },
     {
       "id": "sceneId_1",
       "scrollDownVal": 200,
-      "scrollSpeed": 2000
+      "scrollSpeed": 500
     },
     {
       "id": "sceneId_2",
@@ -17,12 +17,12 @@
     },
     {
       "id": "sceneId_3",
-      "scrollDownVal": 1000,
-      "scrollSpeed": 1500
+      "scrollDownVal": 500,
+      "scrollSpeed": 500
     },
     {
       "id": "sceneId_4",
-      "scrollDownVal": 1200,
+      "scrollDownVal": 500,
       "scrollSpeed": 500
     },
     {
@@ -48,17 +48,17 @@
     {
       "id": "sceneId_9",
       "scrollDownVal": 1500,
-      "scrollSpeed": 1000
+      "scrollSpeed": 500
     },
     {
       "id": "sceneId_10",
       "scrollDownVal": 800,
-      "scrollSpeed": 1500
+      "scrollSpeed": 500
     },
     {
       "id": "sceneId_11",
       "scrollDownVal": 800,
-      "scrollSpeed": 2000
+      "scrollSpeed": 1000
     }
   ]
 }
