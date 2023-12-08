@@ -28,7 +28,11 @@
       "imgSrc": "speech_bubble.png",
       "imgWidth": 150,
       "delayBeforeAppend": 1000,
-      "hasAnimation": false
+      "hasAnimation": true,
+      "animationDuration": 2000,
+      "allowOverlap": false,
+      "animationType": "static",
+      "animationDelay": 0
     }
   ],
   "sceneId_3": [
