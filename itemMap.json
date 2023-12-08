@@ -23,13 +23,13 @@
   "sceneId_2": [
     {
       "itemId": 3,
-      "topPos": 850,
+      "topPos": 820,
       "leftPos": 50,
       "imgSrc": "speech_bubble.png",
       "imgWidth": 150,
-      "delayBeforeAppend": 0,
+      "delayBeforeAppend": 2000,
       "hasAnimation": true,
-      "animationDuration": 2000,
+      "animationDuration": 3000,
       "allowOverlap": false,
       "animationType": "static",
       "animationDelay": 0
