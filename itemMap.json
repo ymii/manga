@@ -75,5 +75,21 @@
       "delayBeforeAppend": 1000,
       "hasAnimation": false
     }
+  ], 
+  "sceneId_4": [
+    {
+      "itemId": 7,
+      "topPos": 2200,
+      "leftPos": 0,
+      "imgSrc": "side_scroll_img.png",
+      "imgWidth": 700,
+      "imgHeight": 400,
+      "delayBeforeAppend": 0,
+      "hasAnimation": true,
+      "animationDuration": 1000,
+      "allowOverlap": true,
+      "animationType": "side_scroll",
+      "animationDelay": 0
+    }
   ]
 }
