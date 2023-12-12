@@ -86,7 +86,7 @@
       "imgHeight": 400,
       "delayBeforeAppend": 0,
       "hasAnimation": true,
-      "animationDuration": 1000,
+      "animationDuration": 5000,
       "allowOverlap": true,
       "animationType": "side_scroll",
       "animationDelay": 0
