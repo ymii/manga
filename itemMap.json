@@ -87,7 +87,7 @@
       "delayBeforeAppend": 0,
       "hasAnimation": true,
       "animationDuration": 2000,
-      "allowOverlap": true,
+      "allowOverlap": false,
       "animationType": "side_scroll",
       "animationDelay": 0
     }
