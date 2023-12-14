@@ -103,7 +103,7 @@
       "animationDuration": 3000,
       "allowOverlap": false,
       "animationType": "shake",
-      "animationDelay": 0
+      "animationDelay": 0,
       "shakeDuration": 300,
       "shakeRangePx": 5,
       "shakeRotateDeg": 2,
