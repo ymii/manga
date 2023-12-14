@@ -90,6 +90,24 @@
       "allowOverlap": false,
       "animationType": "sideScroll",
       "animationDelay": 0
+    },
+    {
+      "itemId": 8,
+      "topPos": 2300,
+      "leftPos": 50,
+      "imgSrc": "shake_bubble.png",
+      "imgWidth": 120,
+      "imgHeight": 200,
+      "delayBeforeAppend": 500,
+      "hasAnimation": true,
+      "animationDuration": 3000,
+      "allowOverlap": false,
+      "animationType": "shake",
+      "animationDelay": 0
+      "shakeDuration": 300,
+      "shakeRangePx": 5,
+      "shakeRotateDeg": 2,
+      "shakeIterationCount": 10
     }
   ]
 }
