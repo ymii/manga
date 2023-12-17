@@ -27,7 +27,7 @@
       "leftPos": 50,
       "imgSrc": "speech_bubble.png",
       "imgWidth": 150,
-      "delayBeforeAppend": 2000,
+      "delayBeforeAppend": 500,
       "hasAnimation": true,
       "animationDuration": 1000,
       "allowOverlap": false,
