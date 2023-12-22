@@ -119,7 +119,7 @@
       "hasAnimation": true,
       "animationDuration": 10000,
       "allowOverlap": false,
-      "animationType": "growShrinkGrow"
+      "animationType": "growShrinkGrow",
       "animationDelay": 0,
       "firstGrowWidth": 250,
       "shrinkWidth": 200,
