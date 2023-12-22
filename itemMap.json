@@ -120,7 +120,10 @@
       "animationDuration": 10000,
       "allowOverlap": false,
       "animationType": "growShrinkGrow"
-      "animationDelay": 0
+      "animationDelay": 0,
+      "firstGrowWidth": 250,
+      "shrinkWidth": 200,
+      "secondGrowWidth": 250
     }
   ]
 }
