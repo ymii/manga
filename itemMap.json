@@ -108,7 +108,10 @@
       "shakeRangePx": 5,
       "shakeRotateDeg": 2,
       "shakeIterationCount": 10
-    },
+    }
+  ],
+  "sceneId_5": [],
+  "sceneId_6": [
     {
       "itemId": 9,
       "topPos": 3600,
