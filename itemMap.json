@@ -108,6 +108,19 @@
       "shakeRangePx": 5,
       "shakeRotateDeg": 2,
       "shakeIterationCount": 10
+    },
+    {
+      "itemId": 9,
+      "topPos": 3600,
+      "leftPos": 200,
+      "imgSrc": "speech_bubble.png",
+      "imgWidth": 200,
+      "delayBeforeAppend": 1000,
+      "hasAnimation": true,
+      "animationDuration": 10000,
+      "allowOverlap": false,
+      "animationType": "growShrinkGrow"
+      "animationDelay": 0
     }
   ]
 }
