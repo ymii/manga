@@ -1,0 +1,1776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            width: 100%;
+            height: 100%;
+        }
+        #main {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            position: relative;
+        }
+        #full_cover {
+            opacity: 0.7;
+            position: absolute;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            background-color: #333333;
+            z-index: 1000;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        #base_canvas {
+            position: relative;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 0;
+            z-index: 1;
+            overflow-x: hidden;
+            overflow-y: scroll;
+            box-sizing: border-box;
+        }
+        #base_canvas::-webkit-scrollbar {
+            display: none;
+        }
+        #base_img_wrapper {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        #items_wrapper {
+            position: relative;
+            margin: 0;
+            padding: 0;
+        }
+        .media_btn_wrapper {
+            position: absolute;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            margin: 0;
+            opacity: 1;
+            transition: opacity 1s ease-out;
+            z-index: 1001;
+            box-sizing: border-box;
+        }
+        #media_btn_wrapper img {
+            width: 30%;
+        }
+        .media_btn_wrapper_fade_out {
+            opacity: 0;
+            pointer-events: none;
+        }
+        #play_btn {
+            display: block;
+        }
+        #pause_btn {
+            display: none;
+        }
+        #replay_btn {
+            display: none;
+        }
+        .kokokara_motokara_btn_wrapper {
+            position: absolute;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 1;
+            transition: opacity 1 ease-out;
+            z-index: 5000;
+        }
+        .kokokara_motokara_btn_wrapper_fade_out {
+            opacity: 0;
+            pointer-events: none;
+        }
+        #kokokara_btn, #motokara_btn {
+            display: block;
+            width: 50%;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="main">
+        <div id="media_btn_wrapper" class="media_btn_wrapper">
+            <img id="play_btn" src="/Users/mii/Desktop/manga/media_icons/play_btn.png">
+            <img id="pause_btn" src="/Users/mii/Desktop/manga/media_icons/pause_btn.png">
+            <img id="replay_btn" src="/Users/mii/Desktop/manga/media_icons/replay_btn.png">
+        </div>
+        <div id="kokokara_motokara_btn_wrapper" class="kokokara_motokara_btn_wrapper">
+            <img id="kokokara_btn" src="/Users/mii/Desktop/manga/media_icons/kokokara_btn.png">
+            <img id="motokara_btn" src="/Users/mii/Desktop/manga/media_icons/motokara_btn.png">
+        </div>
+        <div id="full_cover"></div>
+        <div id="base_canvas">
+            <div id="base_img_wrapper"></div>
+            <div id="items_wrapper"></div>
+        </div>
+    </div><!-- ./ "main" -->
+
+    <script>
+        // -------------------------------------------------------------------------------
+        // Items with "hasAnimation" == true MUST have the following parameters
+        // 1. "delayBeforeAppend"
+        //          delay duration BEFORE appending item
+        // 2. "animationDelay"
+        //          delay duration AFTER item is appended, but BEFORE animation 
+        // 3. "animationDuration"
+        //          duration of animation
+        //
+        // -------------------------------------------------------------------------------
+        //
+        // -------------------------------------------------------------------------------
+        // resetScroll
+        // Reload page on resize.
+        //
+        // -------------------------------------------------------------------------------
+        // 
+        // -------------------------------------------------------------------------------
+        // For "static" animation item.
+        // Keep track of animation status: "playing" or "done"
+        // The only difference between "static" animation item and item without
+        // animation is the existance of "animationDuration" which enables
+        // "allowOverlap" setting.
+        // Since "static" animation item does not have actual animation, "animationDelay" is
+        // not applicable and therefore the default and the only available value is "0".
+        // 
+        // -------------------------------------------------------------------------------
+
+
+        const main = document.getElementById("main");
+        const baseCanvasMaxWidth = 500;
+        const baseCanvas = document.getElementById("base_canvas");
+        const fullCover = document.getElementById("full_cover");
+        const baseImgWrapper = document.getElementById("base_img_wrapper");
+        const itemsWrapper = document.getElementById("items_wrapper");
+        let baseImg;
+        const contentFilePath = "/Users/mii/Desktop/manga/demo_img/assets/";
+        const itemMapJsonURL = "https://raw.githubusercontent.com/ymii/manga/main/itemMap.json";
+        const scrollDownMapJsonURL = "https://raw.githubusercontent.com/ymii/manga/main/scrollDownMap.json";
+        let itemMap;
+        let scrollDownArray;
+        let cancelScroll = false;
+        let animationId;
+        let currentScrollTop = 0;
+        let scrollTopAtPause;
+        const defaultImgWidth = 350;    // The default width of baseImg
+        let adjustVal = 0;
+        let sendResolveTimeoutArray = [];
+        let itemAppendTimeoutArray = [];
+        let transitionItemTracker = [];
+        let transitionTimeoutArray = [];
+        let delayBeforeScrollTimeoutArray = [];
+        let itemStateTracker = [];
+        let sceneIdAtPause;
+        let currentSceneId;
+        let sceneIndex = 0;
+        const mediaBtnWrapper = document.getElementById("media_btn_wrapper");
+        const playBtn = document.getElementById("play_btn");
+        const pauseBtn = document.getElementById("pause_btn");
+        const replayBtn = document.getElementById("replay_btn");
+        let sceneProcessTracker = [];
+        let numOfScenes;
+        const kokokaraMotokaraBtnWrapper = document.getElementById("kokokara_motokara_btn_wrapper");
+        const kokokaraBtn = document.getElementById("kokokara_btn");
+        const motokaraBtn = document.getElementById("motokara_btn");
+        const speedIncrease = 20;
+
+        
+        document.addEventListener("DOMContentLoaded", () => {
+            // Initial call to set base canvas width.
+            setBaseCanvasWidth();
+
+            // Initial call to set base img.
+            loadBaseImg();
+
+            prepareItemMap();
+        });
+
+        
+        // Function to remove items below given Y position.
+        function removeItems(yPosition) {
+
+
+
+        }
+
+
+
+
+        // Iterate sceneProcessTracker and check if all scenes are "done".
+        // state == "done"
+        // itemAppended == true
+        function checkIfAllDone() {
+            let doneSceneCount = 0;
+            for(let i = 0; i < sceneProcessTracker.length; i++) {
+                const sceneId = sceneProcessTracker[i].sceneId;
+                const state = sceneProcessTracker[i].state;
+                const itemAppended = sceneProcessTracker[i].itemAppended;
+
+                doneSceneCount += 1;
+            }
+
+            if(doneSceneCount == numOfScenes) {
+                return true;
+            }
+
+            return false;
+        }
+
+
+        // Event listener to handle "kokokaraBtn".
+        // This button resumes auto-scroll from start of the scene where 
+        // user clicks the button.
+        //
+        // Iterate scrollDownArray and calculate which scene to resume from.
+        // Use the value to scroll the window to resume position.
+        //
+        // Remove all items from itemsWrapper to "reset" the baseCanvase.
+        // Also remove elements from sceneProcessTracker and itemStateTracker.
+        //
+        // Append all items at increased speed for scenes before "sceneIndex".
+        // This will create sceneProcess objects for "skipped" scenes.
+        //
+        // While "skipped" scenes are being processed, call processMain from resume scene 
+        // with default speed.
+        kokokaraBtn.addEventListener("click", async function() {
+            console.log("kokokaraBtn(revised) clicked");
+
+            cancelScroll = false;
+            disableUserScroll();
+            baseCanvas.removeEventListener("click", handleClickRevised);
+
+            const beforePositionalChange = baseCanvas.scrollTop;
+            let scrollDownValSum = 0;
+            let previousSceneIndex;
+            for(let i = 0; i < scrollDownArray.length; i++) {
+                const scrollDownVal = scrollDownArray[i].scrollDownVal * adjustVal;
+                if((scrollDownValSum + scrollDownVal) < beforePositionalChange) {
+                    scrollDownValSum += scrollDownVal;
+                } else {
+                    sceneIndex = i;
+                    previousSceneIndex = sceneIndex - 1;
+                    break;
+                }
+            }
+
+            const positionDiff = scrollDownValSum - beforePositionalChange;
+
+            await scrollerFunction(positionDiff, 1000, 100);
+
+            itemsWrapper.innerHTML = "";
+            sceneProcessTracker.length = 0;
+            itemStateTracker.length = 0;
+            
+            processMain(0, speedIncrease, previousSceneIndex);
+
+            baseCanvas.addEventListener("click", handleClickRevised);
+
+            processMain(sceneIndex, 1, -1);
+        });
+
+
+        // Event listener for "motokaraBtn".
+        // This button resumes auto-scroll from where it was paused.
+        // If scrollTop position is different from where it was paused, 
+        // then calculate the difference and scroll to resume position.
+        // Disable user "click" until scroll is done to prevent scroll error.
+        motokaraBtn.addEventListener("click", async function() {
+
+            console.log("motokaraBtn clicked");
+
+            cancelScroll = false;
+            kokokaraMotokaraBtnWrapper.classList.remove("kokokara_motokara_btn_wrapper_fade_out");
+
+            baseCanvas.removeEventListener("click", handleClickRevised);
+
+            if (scrollTopAtPause < baseCanvas.scrollTop || scrollTopAtPause > baseCanvas.scrollTop) {
+                const positionDiff = scrollTopAtPause - baseCanvas.scrollTop;
+                const scrollToResumeResult = await scrollerFunction(positionDiff, 1000, 100);
+
+                // Set timer before processing resume.
+                await timeoutFunction(1000);
+                baseCanvas.addEventListener("click", handleClickRevised);
+            }
+
+            fullCover.style.display = "none";
+
+            for (let i = 0; i < sceneProcessTracker.length; i++) {
+                const sceneId = sceneProcessTracker[i].sceneId;
+                const state = sceneProcessTracker[i].state;
+                const itemAppended = sceneProcessTracker[i].itemAppended;
+
+                if (state == "started" && itemAppended == false) {
+                    // Remove all items of this scene from baseCanvas.
+                    // Remove all stylesheets for the items removed.
+                    // Remove this object from sceneProcessTracker.
+                    // Remove the object of this item in itemStateTracker.
+                    // This starts the scene from the beginning.
+                    const itemInfoArray = itemMap.get(sceneId);
+                    for (let j = 0; j < itemInfoArray.length; j++) {
+                        const itemNodeId = "itemId_" + itemInfoArray[j]["itemId"];
+                        if (itemsWrapper.querySelector("#" + itemNodeId)) {
+                            itemsWrapper.removeChild(document.getElementById(itemNodeId));
+                        }
+
+                        let indexToRemove;
+                        for (let h = 0; h < itemStateTracker.length; h++) {
+                            if (itemStateTracker[h]["targetId"] == itemInfoArray[j]["itemId"]) {
+                                indexToRemove = h;
+                                break;
+                            }
+                        }
+                        itemStateTracker.splice(indexToRemove, 1);
+                    }
+
+                    sceneIndex = sceneId.substring(sceneId.indexOf("_") + 1);
+
+                    console.log("(*1) sceneIndex at motokara: " + sceneIndex);
+
+                    sceneProcessTracker.splice(i, 1);
+
+                    break;
+                } else if (state == "started" && itemAppended == true) {
+                    // Scroll remaining distance of this scene.
+                    // When scroll is done, update the "state" of this 
+                    // sceneProcess object to "done".
+                    //
+                    // Scroll remaining distance of the "paused" scene.
+                    // Iterate scrollDownArray and get the sum of all "scrollDownVal" 
+                    // to the point of "sceneIdAtPause". 
+                    // Then subtract "scrollTopAtPause" from the sum to get the 
+                    // remaining scroll distance.
+                    // Must factor in adjust value.
+                    //
+                    // To calculate "scrollSpeed" for scrollerFunction...
+                    // A: scrollDownValSum
+                    // B: fullScrollDownVal, full scrollDownVal of sceneIdAtPause(scrollDownArray[i]["scrollDownVal"])
+                    // C: scrollTopAtPause
+                    // D: scrollDownSumBefore, A - B, which is the sum of scrollDownVals just before paused scene.
+                    // E: progressDistance, C - D, which represents the actual scroll progress in distance made before paused.
+                    // F: progressPercentage = E / B
+                    // G: revisedScrollSpeed
+                    //
+                    // If "revisedScrollSpeed" is below 300 milliseconds, then set it to 300.
+                    let scrollDownValSum = 0;
+                    let scrollDownValSumBefore = 0;
+                    let fullScrollDownVal = 0;
+                    let defaultScrollSpeed = 0;
+                    let fullDelayBeforeScroll = 0;
+
+                    // This specifies the index of next scene in scrollDownArray.
+                    // Pass this as a parameter when calling processMain function at 
+                    // the bottom of this code block.
+                    for (let i = 0; i < scrollDownArray.length; i++) {
+                        scrollDownValSum += scrollDownArray[i]["scrollDownVal"] * adjustVal;
+
+                        if (scrollDownArray[i]["id"] == sceneIdAtPause) {
+                            scrollDownValSumBefore = scrollDownValSum - (scrollDownArray[i]["scrollDownVal"] * adjustVal);
+                            fullScrollDownVal = scrollDownArray[i]["scrollDownVal"] * adjustVal;
+                            defaultScrollSpeed = scrollDownArray[i]["scrollSpeed"];
+                            fullDelayBeforeScroll = scrollDownArray[i]["delayBeforeScroll"];
+                            sceneIndex = i + 1;
+                            console.log("(*2) sceneIndex at motokara: " + sceneIndex);
+                            break;
+                        }
+                    }
+
+                    const remainingScrollVal = scrollDownValSum - scrollTopAtPause;
+
+                    const progressDistance = scrollTopAtPause - scrollDownValSumBefore;
+                    const progressPercentage = progressDistance / fullScrollDownVal;
+                    let revisedScrollSpeed = defaultScrollSpeed * (1 - progressPercentage);
+
+                    if (revisedScrollSpeed < 300) {
+                        revisedScrollSpeed = 300;
+                    }
+
+                    try {
+                        const scrollerFunctionResult = await scrollerFunction(remainingScrollVal, revisedScrollSpeed.toFixed(2), fullDelayBeforeScroll);
+                        sceneProcessTracker[i].state = "done";
+                    } catch (error) {
+                        console.log(error);
+                    }
+
+                    break;
+                }
+            }
+
+            baseCanvas.addEventListener("click", handleClickRevised);
+
+            processMain(sceneIndex, 1, -1);
+        });
+        
+
+        // Event listener for "replay" button.
+        // Remove all items inside baseCanvas and scroll to top.
+        // Once the window is scrolled to the top, wait 1 seconds before 
+        // calling processMain to start auto-scroll.
+        // Also initialize sceneProcessTracker array and itemStateTracker array
+        replayBtn.addEventListener("click", async function replayBtnFunction() {
+            cancelScroll = false;
+            const scrollDistance = baseCanvas.scrollTop;
+
+            sceneProcessTracker.length = 0;
+            itemStateTracker.length = 0;
+            itemsWrapper.innerHTML = "";
+            const scrollerFunctionResult = await scrollerFunction(-scrollDistance, 1000, 0);
+
+            await timeoutFunction(1000);
+
+            processMain(0, 1, -1);
+        });
+
+
+        // Event listener for "play" button.
+        // This button is only shown at the initial state.
+        // Hide "fullCover" by setting "display" to "none".
+        // By clicking the button, the opacity transitions from 1 to 0 
+        // with "fade_out" class.
+        playBtn.addEventListener("click", async function playBtnFunction() {
+            cancelScroll = false;
+            mediaBtnWrapper.classList.add("media_btn_wrapper_fade_out");
+            fullCover.style.display = "none";
+
+            baseCanvas.addEventListener("click", handleClickRevised);
+            
+            processMain(sceneIndex, 1, -1);
+        });
+
+
+        pauseBtn.addEventListener("click", () => {
+            // Cancel auto-scroll
+            cancelScroll = true;
+
+            // Get scrollTop of baseCanvas at "paused".
+            scrollTopAtPause = baseCanvas.scrollTop;
+
+            // Get sceneId where auto-scroll is paused.
+            sceneIdAtPause = currentSceneId;
+
+            // To prevent premature "resume" until all "paused" calculations are done,
+            // disable user "click" from baseCanvas.
+            // This event listener is restored at the bottom of this code block.
+            baseCanvas.removeEventListener("click", handleClickRevised);
+
+            // This clears timeout set in scrollerFunction setTimeout.
+            for (const x of delayBeforeScrollTimeoutArray) {
+                clearTimeout(x);
+            }
+
+            // This clears timeout for itemAppendTimeoutId in appendItem function.
+            for (const x of itemAppendTimeoutArray) {
+                clearTimeout(x);
+            }
+
+            // This clears timeout for sendResolveTimeoutId in appendItem function.
+            for (const x of sendResolveTimeoutArray) {
+                clearTimeout(x);
+            }
+
+            // Cancel animation frame set in scrollerFunction.
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+            }
+
+            // Iterate itemStateTracker and "pause" animation for items with extras.
+            // Change animationState from "playing" to "pause".
+            // The "pause" process differs by animation type, refer to comments on each type.
+            for (let i = 0; i < itemStateTracker.length; i++) {
+                if (itemStateTracker[i].extras) {
+                    if (itemStateTracker[i].extras.animationState == "playing") {
+                        const animationType = getAnimationTypeByItemId(sceneIdAtPause, itemStateTracker[i].targetId);
+
+                        // Pause "scaleUp" or "scaleDown" animation by setting animation to "none".
+                        if (animationType == "scaleUp" || animationType == "scaleDown") {
+                            const targetDiv = document.getElementById(itemStateTracker[i].extras.targetId);
+                            const targetDivWidthAtCancel = targetDiv.getBoundingClientRect().width;
+                            const targetDivHeightAtCancel = targetDiv.getBoundingClientRect().height;
+                            targetDiv.style.width = targetDivWidthAtCancel + "px";
+                            targetDiv.style.height = targetDivHeightAtCancel + "px";
+                            targetDiv.style.animation = "none";
+
+                            const leftPosAtCancel = Math.floor(itemStateTracker[i].extras.imgCenterX - (targetDivWidthAtCancel / 2));
+                            const topPosAtCancel = Math.floor(itemStateTracker[i].extras.imgCenterY - (targetDivHeightAtCancel / 2));
+                            targetDiv.style.left = leftPosAtCancel + "px";
+                            targetDiv.style.top = topPosAtCancel + "px";
+
+                            itemStateTracker[i].extras.animationState = "paused";
+                        }
+
+                        // Pause "sideScroll" animation by setting animation to "none".
+                        // To keep the "paused" state, set current left position to style.
+                        // Add "pausedTime" to extras. This is required to calculate the remaining 
+                        // duration for animation on resume.
+                        if (animationType == "sideScroll") {
+                            const targetDiv = document.getElementById(itemStateTracker[i].extras.targetId);
+                            const pausedTime = performance.now();
+                            const computedStyleLeft = window.getComputedStyle(targetDiv).getPropertyValue("left");
+                            targetDiv.style.left = computedStyleLeft;
+                            itemStateTracker[i].extras.xPos = computedStyleLeft;
+                            itemStateTracker[i].extras.animationState = "paused";
+                            itemStateTracker[i].extras["paused"] = pausedTime;
+                            targetDiv.style.animation = "none";
+                        }
+
+                        // Pause "shake" animation by setting animation to "none".
+                        // Get timestamp of "paused" time and save it in the "extras".
+                        // Also set "animationState" in "extras" to "paused".
+                        if (animationType == "shake") {
+                            const targetDiv = document.getElementById(itemStateTracker[i].extras.targetId);
+                            const pausedTime = performance.now();
+                            itemStateTracker[i].extras.animationState = "paused";
+                            itemStateTracker[i].extras.shakePaused = pausedTime;
+                            targetDiv.style.animation = "none";
+                        }
+
+                        // Pause "growShrinkGrow" animation by setting animation to "none".
+                        // Get the current width and keep the width when "paused" by setting it to the element.
+                        if (animationType == "growShrinkGrow") {
+                            const pausedTime = performance.now();
+                            itemStateTracker[i].extras.growPaused = pausedTime;
+                            const targetDiv = document.getElementById(itemStateTracker[i].extras.targetId);
+
+                            const widthAtCancel = targetDiv.getBoundingClientRect().width;
+                            targetDiv.style.width = widthAtCancel + "px";
+
+                            targetDiv.style.animation = "none";
+
+                            itemStateTracker[i].extras.animationState = "paused";
+                        }
+                    }
+                }
+            }
+
+            enableUserScroll();
+
+            // Restore event listener that is removed at the top of this code block.
+            // For safe measure, set timeout of 2 seconds before restoring.
+            setTimeout(() => {
+                baseCanvas.addEventListener("click", handleClickRevised);
+            }, 2000);
+        });
+
+
+        // Function to change the image source of media button inside "media_btn_wrapper".
+        // If parameter "btnType" is set to "pause", then the current img is set to "play".
+        // Change this to "pause" img.
+        // If parameter "btnType" is set to "play", then the current img is set to "pause".
+        // Change this to "play" img.
+        // The opacity of "media_btn_wrapper" is set to 0 by adding 
+        // "fade_out" class when "play" button is clicked.
+        // Removing this class from the wrapper will revert back to 
+        // initial opacity of 1.
+        // After the "pause" button is shown, add "fade_out" class again 
+        // to fade-out the "pause" button after setTimeout delay.
+        function changeMediaBtn(btnType) {
+            return new Promise((resolve, reject) => {
+                if (btnType == "pause") {
+                    mediaBtnWrapper.classList.remove("media_btn_wrapper_fade_out");
+                    kokokaraMotokaraBtnWrapper.style.display = "none";
+                    mediaBtnWrapper.style.display = "flex";
+                    replayBtn.style.display = "none";
+                    playBtn.style.display = "none";
+                    pauseBtn.style.display = "block";
+
+                    setTimeout(() => {
+                        mediaBtnWrapper.classList.add("media_btn_wrapper_fade_out");
+                        resolve(true);
+                    }, 3000);
+                } else if(btnType == "play") {
+                    mediaBtnWrapper.classList.remove("media_btn_wrapper_fade_out");
+                    replayBtn.style.display = "none";
+                    pauseBtn.style.display = "none";
+                    playBtn.style.display = "block";
+
+                    setTimeout(() => {
+                        mediaBtnWrapper.classList.add("media_btn_wrapper_fade_out");
+                        resolve(true);
+                    }, 3000);
+                } else if(btnType == "replay") {
+                    mediaBtnWrapper.classList.remove("media_btn_wrapper_fade_out");
+                    kokokaraMotokaraBtnWrapper.style.display = "none";
+                    mediaBtnWrapper.style.display = "flex";
+                    pauseBtn.style.display = "none";
+                    playBtn.style.display = "none";
+                    replayBtn.style.display = "block";
+
+                    setTimeout(() => {
+                        mediaBtnWrapper.classList.add("media_btn_wrapper_fade_out");
+                        resolve(true);
+                    }, 3000);
+                } else if(btnType == "kokokara_motokara") {
+                    mediaBtnWrapper.style.display = "none";
+                    kokokaraMotokaraBtnWrapper.classList.remove("kokokara_motokara_btn_wrapper_fade_out");
+                    kokokaraMotokaraBtnWrapper.style.display = "flex";
+
+                    setTimeout(() => {
+                        kokokaraMotokaraBtnWrapper.classList.add("kokokara_motokara_btn_wrapper_fade_out");
+                        resolve(true);
+                    }, 3000);
+                }
+
+            });
+        }
+
+
+        // 
+        function updateItemStateTracker(itemState) {
+            for(let i = 0; i < itemStateTracker.length; i++) {
+                if(itemStateTracker[i].targetId == itemState.targetId) {
+                    itemStateTracker[i] = itemState;
+                    break;
+                }
+            }
+        }
+
+
+        // 
+        function appendItemRevised(sceneId, speedIncrease) {
+            return new Promise((resolve, reject) => {
+                // Get items from itemMap for this sceneId.
+                const itemInfoArray = itemMap.get(sceneId);
+
+                // Initialize setTimeout timer for this scene.
+                let delayBeforeAppendSum = 0;
+
+                if(itemInfoArray == undefined || itemInfoArray.length == 0) {
+                    // This scene does not have any item to append.
+                    resolve(true);
+                } else {
+                    for(let i = 0; i < itemInfoArray.length; i++) {
+                        // A map object that holds "id", "topPos", "imgSrc", etc.
+                        const itemInfo = itemInfoArray[i];
+                        const itemId = itemInfo["itemId"];
+                        const itemNodeId = "itemId_" + itemId;
+
+                        // Get item's appended state. Refer to function getIsAppended comments for detail.
+                        const appendState = getIsAppended(itemId);
+
+                        // [0] New item
+                        // [1] Item is not called but not appended yet.
+                        // [2] Item is called and appended.
+                        // [3] Item is appended and animationState is "paused" -> THIS IS NOT BEING USED!!
+                        //
+                        // If appendState == 2, add timers(delayBeforeAppend, animationDuration, etc) to delayBeforeAppendSum.
+                        // Without adding these timers to delayBeforeAppendSum, the timings afterwards 
+                        // will be incorrect.
+                        if(appendState == 0 || appendState == 1) {
+                            delayBeforeAppendSum += itemInfo["delayBeforeAppend"] / speedIncrease;
+
+                            // Create itemState if item is "new".
+                            let itemState;
+
+                            switch(appendState) {
+                                case 0:
+                                    // This item is "new". Create itemState object.
+                                    itemState = {
+                                        "targetId": itemId,
+                                        "isCalled": true,
+                                        "isAppended": false
+                                    }
+                                    itemStateTracker.push(itemState);
+                                    break;
+                                case 1:
+                                case 3:
+                                    itemState = getItemState(itemId);
+                                    break;
+                            }
+
+                            const itemAppendTimeoutId = setTimeout(() => {
+                                if(!cancelScroll) {
+                                    if(appendState == 0 || appendState == 1) {
+                                        // This item is either "new" or not appended yet.
+                                        // If item has animation, then play from beginning.
+                                        appendItemWorker(itemInfo, itemId);
+
+                                        if(itemInfo["hasAnimation"]) {
+                                            // Animation type of "static" does not have "extras", so 
+                                            // changing "isAppended" value from "false" to "true" in itemState 
+                                            // is all that is required.
+                                            // If cancelScroll is activated, then "isAppended" value is "false".
+                                            itemState.isAppended = true;
+                                            updateItemStateTracker(itemState);
+
+                                            // For animation types other than "static", create and store 
+                                            // "extras" object in itemState.
+                                            let extras = undefined;
+
+                                            // For "scaleUp" or "scaleDown" animation.
+                                            // Create extras object to keep track of animation state.
+                                            if (itemInfo["animationType"] == "scaleUp" || itemInfo["animationType"] == "scaleDown") {
+                                                const imgCenterX = (itemInfo["leftPos"] * adjustVal) + ((itemInfo["imgWidth"] * adjustVal) / 2);
+                                                const imgCenterY = (itemInfo["topPos"] * adjustVal) + ((itemInfo["imgHeight"] * adjustVal) / 2);
+                                                
+                                                extras = {
+                                                    "targetId": itemNodeId,
+                                                    "imgCenterX": imgCenterX,
+                                                    "imgCenterY": imgCenterY,
+                                                    "animationState": "playing",
+                                                    "styleSheetId": "divStyle_" + itemId
+                                                };
+
+                                                itemState.extras = extras;
+                                                updateItemStateTracker(itemState);
+
+                                                // Event listener for "animationend".
+                                                // When animation is done, change animation state from "playing" to "done".
+                                                document.getElementById(itemNodeId).addEventListener("animationend", () => {
+                                                    itemState.extras.animationState = "done";
+                                                    updateItemStateTracker(itemState);
+                                                });
+                                            }
+
+                                            // For "sideScroll" animation.
+                                            // Create extras to keep track of animation state.
+                                            if(itemInfo["animationType"] == "sideScroll") {
+                                                const sideScrollStart = performance.now();
+
+                                                extras = {
+                                                    "targetId": itemNodeId,
+                                                    "animationState": "playing",
+                                                    "xPos": window.getComputedStyle(document.getElementById(itemNodeId)).getPropertyValue("left"),
+                                                    "start": sideScrollStart
+                                                }
+
+                                                itemState.extras = extras;
+                                                updateItemStateTracker(itemState);
+
+                                                // Event listener for "animationend".
+                                                // When animation is done, change animation state from "playing" to "done".
+                                                document.getElementById(itemNodeId).addEventListener("animationend", () => {
+                                                    itemState.extras.animationState = "done";
+                                                    updateItemStateTracker(itemState);
+                                                });
+                                            }
+
+                                            // For "shake" animation.
+                                            // Create extras to keep track of animation state.
+                                            if(itemInfo["animationType"] == "shake") {
+                                                const shakeStart = performance.now();
+
+                                                extras = {
+                                                    "targetId": itemNodeId,
+                                                    "animationState": "playing",
+                                                    "shakeStart": shakeStart,
+                                                    "shakePaused": "",
+                                                    "progressPercentageSum": 0
+                                                }
+
+                                                itemState.extras = extras;
+                                                updateItemStateTracker(itemState);
+
+                                                // Event listener for "animationend".
+                                                // When animation is done, change animation state from "playing" to "done".
+                                                document.getElementById(itemNodeId).addEventListener("animationend", () => {
+                                                    itemState.extras.animationState = "done";
+                                                    updateItemStateTracker(itemState);
+                                                });
+                                            }
+
+                                            // For "growShrinkGrow" animation.
+                                            // Create extras to keep track of animation state.
+                                            if(itemInfo["animationType"] == "growShrinkGrow") {
+                                                const growStart = performance.now();
+
+                                                extras = {
+                                                    "targetId": itemNodeId,
+                                                    "animationState": "playing",
+                                                    "growStart": growStart,
+                                                    "growPaused": "",
+                                                }
+
+                                                itemState.extras = extras;
+                                                updateItemStateTracker(itemState);
+
+                                                // Event listener for "animationend".
+                                                // When animation is done, change animation state from "playing" to "done".
+                                                document.getElementById(itemNodeId).addEventListener("animationend", () => {
+                                                    itemState.extras.animationState = "done";
+                                                    updateItemStateTracker(itemState);
+                                                });
+                                            }
+                                        } else {
+                                            // No animation item. Change "isAppended" value in itemState and 
+                                            // update itemStateTracker array.
+                                            itemState.isAppended = true;
+                                            updateItemStateTracker(itemState);
+                                        }
+                                    }
+                                }
+                            }, delayBeforeAppendSum);
+
+                            // If this item has animation and allowOverlap is set as false, then 
+                            // add animation duration and animationDelay to delayBeforeAppendSum.
+                            // This will be reflected from the next iteration.
+                            // Add 100 milliseconds for safe measure.
+                            //
+                            // ====================================================================
+                            //                                  To Do
+                            // --------------------------------------------------------------------
+                            // When resuming "paused" animation, use "resumeDuration" instead of 
+                            // "animationDuration".
+                            // ====================================================================
+                            if(itemInfo["hasAnimation"]) {
+                                // Timer setting for items with animation.
+                                if(!itemInfo["allowOverlap"]) {
+                                    delayBeforeAppendSum += (itemInfo["delayBeforeAppend"] / speedIncrease) + (itemInfo["animationDuration"] / speedIncrease) + (itemInfo["animationDelay"] / speedIncrease) + 100;
+                                } else {
+                                    delayBeforeAppendSum += (itemInfo["delayBeforeAppend"] / speedIncrease) + (itemInfo["animationDelay"] / speedIncrease) + 100;
+                                }
+                            } else {
+                                // Timer setting for items without animation.
+                                delayBeforeAppendSum += (itemInfo["delayBeforeAppend"] / speedIncrease) + 100;
+                            }
+
+                            itemAppendTimeoutArray.push(itemAppendTimeoutId);
+                        } else if(appendState == 2) {
+                            if (itemInfo["hasAnimation"]) {
+                                // Timer setting for items with animation.
+                                if (!itemInfo["allowOverlap"]) {
+                                    delayBeforeAppendSum += (itemInfo["delayBeforeAppend"] / speedIncrease) + (itemInfo["animationDuration"] / speedIncrease) + (itemInfo["animationDelay"] / speedIncrease) + 100;
+                                } else {
+                                    delayBeforeAppendSum += (itemInfo["delayBeforeAppend"] / speedIncrease) + (itemInfo["animationDelay"] / speedIncrease) + 100;
+                                }
+                            } else {
+                                // Timer setting for items without animation.
+                                delayBeforeAppendSum += (itemInfo["delayBeforeAppend"] / speedIncrease) + 100;
+                            }
+                        }
+                    }   // Iterate end bracket
+                }
+
+                const sendResolveTimeoutId = setTimeout(() => {
+                    if (!cancelScroll) {
+                        resolve(true);
+                    } else {
+                        reject("cancelScroll detected in sendResolveTimeout");
+                    }
+                }, delayBeforeAppendSum + 1000);
+                sendResolveTimeoutArray.push(sendResolveTimeoutId);
+            });
+        }
+
+
+        // Worker for appending items on baseCanvas.
+        // This worker is for all items, with or without animation.
+        // Animation is handled in appendItemRevised function.
+        function appendItemWorker(itemInfo, itemId) {
+            // Create a style sheet of this item and set id.
+            // "id": "stylesheet_id_" + itemId
+            const styleElement = document.createElement("style");
+            styleElement.type = "text/css";
+            styleElement.id = "stylesheet_id_" + itemId;
+
+            // Check if stylesheet of this Id already exists.
+            // This is for when reappending a removed item on after "pause".
+            const styleElementById = document.getElementById(styleElement.id);
+
+            if(styleElementById == null) {
+                // Create style textContent of the item.
+                let styleTextContent;
+
+                // Get style textContent based on animation type.
+                if (itemInfo["hasAnimation"]) {
+                    // This item has animation.
+                    switch (itemInfo["animationType"]) {
+                        case "scaleUp":
+                        case "scaleDown":
+                            styleTextContent = getStyleTextContentScaleUp(itemInfo);
+                            break;
+                        case "sideScroll":
+                            styleTextContent = getStyleTextContentSideScroll(itemInfo);
+                            break;
+                        case "shake":
+                            styleTextContent = getStyleTextContentShake(itemInfo);
+                            break;
+                        case "static":
+                            styleTextContent = getStyleTextContent(itemInfo);
+                            break;
+                        case "growShrinkGrow":
+                            styleTextContent = getStyleTextContentGrowShrinkGrow(itemInfo);
+                            break;
+                    }
+                } else {
+                    // This item does not have animation.
+                    styleTextContent = getStyleTextContent(itemInfo);
+                }
+
+                // Set styleTextContent in styleElement and appended to document head.
+                styleElement.textContent = styleTextContent;
+                document.head.appendChild(styleElement);
+            }
+
+            // Create "div" element.
+            // Use classname set in styleTextContent.
+            const itemNode = document.createElement("div");
+            const itemNodeId = "itemId_" + itemId;
+            itemNode.setAttribute("id", itemNodeId);
+            itemNode.classList.add("divStyle_" + itemId);
+
+            // Create "img" element.
+            // Use classname set in styleTextContent.
+            const imgNode = document.createElement("img");
+            const imgNodeId = "imgId_" + itemId;
+            imgNode.setAttribute("id", imgNodeId);
+            imgNode.classList.add("imgStyle_" + itemId);
+            imgNode.src = contentFilePath + itemInfo["imgSrc"];
+
+            itemNode.appendChild(imgNode);
+
+            itemsWrapper.appendChild(itemNode);
+        }
+
+
+        // Remove item from baseCanvas.
+        function removeItem(itemDiv) {
+            baseCanvas.removeChild(itemDiv);
+        }
+
+
+
+        // Iterate itemMap and get animation type for itemId in parameter.
+        function getAnimationTypeByItemId(sceneId, itemId) {
+            let animationType;
+            let allItems = itemMap.get(sceneId);
+
+            for(let i = 0; i < allItems.length; i++) {
+                if(allItems[i].itemId == itemId) {
+                    animationType = allItems[i].animationType;
+                    break;
+                }
+            }
+
+            return animationType;
+        }
+
+
+        // This is for "growShrinkGrow" animation items.
+        // Values must factor in adjustVal.
+        function getStyleTextContentGrowShrinkGrow(itemInfo) {
+            // Adjust values for window size with adjustVal.
+            const adjustedTopPos = itemInfo["topPos"] * adjustVal;
+            const adjustedLeftPos = itemInfo["leftPos"] * adjustVal;
+            const adjustedImgWidth = itemInfo["imgWidth"] * adjustVal;
+            const animationDuration = itemInfo["animationDuration"] * adjustVal;
+            const animationDurationSeconds = animationDuration / 1000;
+            const firstGrowWidth = itemInfo["firstGrowWidth"] * adjustVal;
+            const shrinkWidth = itemInfo["shrinkWidth"] * adjustVal;
+            const secondGrowWidth = itemInfo["secondGrowWidth"] * adjustVal;
+
+            // Generate animation name for textContent.
+            // Use the name for keyframes.
+            // Naming convention: "animation_" + itemInfo["itemId"]
+            const animationName = "animation_" + itemInfo["itemId"];
+
+            let styleTextContent = ".divStyle_" + itemInfo["itemId"] + " {\
+                position: absolute;\
+                top: " + adjustedTopPos + "px;\
+                left: " + adjustedLeftPos + "px;\
+                width: " + adjustedImgWidth + "px;\
+                margin: 0;\
+                padding: 0;\
+                transform: translate(-50%, -50%);\
+                animation: " + animationName + " " + animationDurationSeconds + "s ease-out 1 forwards;\
+                animation-delay: " + itemInfo["animationDelay"] + "s;\
+            }";
+
+            styleTextContent += ".imgStyle_" + itemInfo["itemId"] + " {\
+                width: 100%;\
+                height: 100%;\
+            }";
+
+            // Create keyframes for "growShrinkGrow".
+            styleTextContent += "\
+                @keyframes " + animationName + " {\
+                    0% { width: " + adjustedImgWidth + "px;}\
+                    3% { width: " + firstGrowWidth + "px;}\
+                    6% { width: " + shrinkWidth + "px;}\
+                    100% { width: " + secondGrowWidth + "px;}\
+                }\
+            ";
+            
+            return styleTextContent;
+        }
+
+
+
+        // This is for "shake" animation items.
+        function getStyleTextContentShake(itemInfo) {
+            // Adjust values for window size with "adjustVal".
+            const adjustedTopPos = itemInfo["topPos"] * adjustVal;
+            const adjustedLeftPos = itemInfo["leftPos"] * adjustVal;
+            const adjustedWidth = itemInfo["imgWidth"] * adjustVal;
+            const adjustedHeight = itemInfo["imgHeight"] * adjustVal;
+            const animationDuration = itemInfo["animationDuration"] * adjustVal;
+            const animationDurationSeconds = animationDuration / 1000;
+            const shakeDuration = itemInfo["shakeDuration"] / 1000;
+            const shakeRangePx = itemInfo["shakeRangePx"] * adjustVal;
+            
+            // Generate animation name for textContent.
+            // Use the name for keyframes.
+            // "animation_" + itemInfo["itemId"]
+            const animationName = "animation_" + itemInfo["itemId"];
+
+            let styleTextContent = ".divStyle_" + itemInfo["itemId"] + " {\
+                position: absolute;\
+                top: " + adjustedTopPos + "px;\
+                left: " + adjustedLeftPos + "px;\
+                width: " + adjustedWidth + "px;\
+                height: " + adjustedHeight + "px;\
+                margin: 0;\
+                padding: 0;\
+                animation: " + animationName + " " + shakeDuration + "s;\
+                animation-delay: " + itemInfo["animationDelay"] + "s;\
+                animation-iteration-count: " + itemInfo["shakeIterationCount"] + ";\
+            }";
+
+            styleTextContent += ".imgStyle_" + itemInfo["itemId"] + " {\
+                width: 100%;\
+                height: 100%;\
+            }";
+
+            // Create keyframes for "shake".
+            styleTextContent += "\
+                @keyframes " + animationName + " {\
+                    12.5% { transform: translate(" + shakeRangePx + "px, " + shakeRangePx + "px) rotate(" + itemInfo["shakeRotateDeg"] + "deg); }\
+                    25% { transform: translate(0px, 0px); }\
+                    37.5% { transform: translate(-" + shakeRangePx + "px, " + shakeRangePx + "px) rotate(-" + itemInfo["shakeRotateDeg"] + "deg);}\
+                    50% { transform: translate(0px, 0px); }\
+                    62.5% { transform: translate(-" + shakeRangePx + "px, -" + shakeRangePx + "px) rotate(" + itemInfo["shakeRotateDeg"] + "deg); }\
+                    75% { transform: translate(0px, 0px); }\
+                    87.5% { transform: translate(" + shakeRangePx + "px, -" + shakeRangePx + "px) rotate(-" + itemInfo["shakeRotateDeg"] + "deg);}\
+                    100% { transform: translate(0px, 0px); }\
+                }\
+            ";
+
+            return styleTextContent;
+        }
+
+
+        // This is for "sideScroll" animation items.
+        function getStyleTextContentSideScroll(itemInfo) {
+            const adjustedTopPos = itemInfo["topPos"] * adjustVal;
+            const adjustedLeftPos = itemInfo["leftPos"] * adjustVal;
+            const adjustedWidth = itemInfo["imgWidth"] * adjustVal;
+            const adjustedHeight = itemInfo["imgHeight"] * adjustVal;
+            const animationDuration = itemInfo["animationDuration"] * adjustVal;
+            const animationDurationSeconds = animationDuration / 1000;
+
+            let styleTextContent = ".divStyle_" + itemInfo["itemId"] + " {\
+                position: absolute;\
+                top: " + adjustedTopPos + "px;\
+                left: " + adjustedLeftPos + "px;\
+                width: " + adjustedWidth + "px;\
+                height: " + adjustedHeight + "px;\
+                margin: 0;\
+                padding: 0;\
+                animation: slideAnimation " + animationDurationSeconds + "s linear 1 forwards;\
+                animation-delay: " + itemInfo["animationDelay"] + "s;\
+            }";
+
+            styleTextContent += ".imgStyle_" + itemInfo["itemId"] + " {\
+                width: 100%;\
+                height: 100%;\
+            }";
+
+            // Create keyframes.
+            // To calculate "to left" value, subtract screenWidth from imgWidth.
+            const toLeftVal = (Math.abs(adjustedWidth - parseInt(baseCanvas.style.width))) + "px";
+            styleTextContent += "\
+                @keyframes slideAnimation {\
+                    from {left: 0;}\
+                    to {left: -" + toLeftVal + ";}\
+                }\
+            ";
+
+            return styleTextContent;
+        }
+
+
+        // This is for "scaleUp" animation items.
+        // Create style sheet text content for div and img.
+        // The "itemInfo" in parameter holds style values.
+        // Class names for div and img: "divStyle_" + itemId, "imgStyle_" + itemId.
+        // Position, width, and height values must be adjusted with "adjustVal".
+        function getStyleTextContentScaleUp(itemInfo) {
+            const adjustedTopPos = itemInfo["topPos"] * adjustVal;
+            const adjustedLeftPos = itemInfo["leftPos"] * adjustVal;
+            const adjustedWidth = itemInfo["imgWidth"] * adjustVal;
+            const adjustedHeight = itemInfo["imgHeight"] * adjustVal;
+            const animationDuration = itemInfo["animationDuration"] * adjustVal;
+            const animationDurationSeconds = animationDuration / 1000;
+            const animationDelaySeconds = itemInfo["animationDelay"] / 1000;
+
+            let styleTextContent = ".divStyle_" + itemInfo["itemId"] + " {\
+                position: absolute;\
+                top: " + adjustedTopPos + "px;\
+                left: 0px;\
+                width: " + adjustedWidth + "px;\
+                height: " + adjustedHeight + "px;\
+                margin: 0;\
+                padding: 0;\
+                animation: scaleAnimation " + animationDurationSeconds + "s ease-in " + animationDelaySeconds + "s forwards;\
+            }";
+
+            styleTextContent += ".imgStyle_" + itemInfo["itemId"] + " {\
+                width: 100%;\
+                height: 100%;\
+            }";
+
+            // Create keyframes for transform.
+            styleTextContent += "\
+                @keyframes scaleAnimation {\
+                    to {\
+                        transform: scale("+ itemInfo["scaleTo"] +");\
+                    }\
+                }\
+            ";
+
+            return styleTextContent;
+        }
+
+        
+        // This is for items without animation and "static" animation.
+        // Create style sheet text content for div and img.
+        // The "itemInfo" in parameter holds style values.
+        // Class names for div and img: "divStyle_" + itemId, "imgStyle_" + itemId.
+        // Position values and width value must be adjusted with "adjustVal".
+        function getStyleTextContent(itemInfo) {
+            const adjustedTopPos = itemInfo["topPos"] * adjustVal;
+            const adjustedLeftPos = itemInfo["leftPos"] * adjustVal;
+            const adjustedWidth = itemInfo["imgWidth"] * adjustVal;
+
+            let styleTextContent = ".divStyle_" + itemInfo["itemId"] + " {\
+                position: absolute;\
+                top: " + adjustedTopPos + "px;\
+                left: " + adjustedLeftPos + "px;\
+                width: " + adjustedWidth + "px;\
+                margin: 0;\
+                padding: 0;\
+            }";
+
+            styleTextContent += ".imgStyle_" + itemInfo["itemId"] + " {\
+                width: 100%;\
+                height: 100%;\
+            }";
+
+            return styleTextContent;
+        }
+
+
+        // This is the main process.
+        // Iterate scrollDownArray and scroll "baseCanvas" for each scene.
+        // Disable user-scroll for "baseCanvas" while in process.
+        // The parameter "stopAtIndex" defines where to stop the auto-scroll.
+        // This parameter is for filling in the skipped scenes.
+        // If the value is -1, then use the length of scrollDownArray.
+        async function processMain(sceneIndex, speedIncrease, stopAtIndex) {
+            disableUserScroll();
+
+            // If speedIncrease is over 1, then this function is called to 
+            // fill in the "skipped" scenes from kokokaraBtn.
+            // In this case, call to scrollerFunction is not allowed to prevent auto-scroll.
+            let enableAutoScroll = true;
+            if(speedIncrease > 1) {
+                enableAutoScroll = false;
+            }
+
+            // Set scrollDownArray by calling fetchScrollDownMapJson if the array is undefined.
+            // Each element in array holds three values: "id" which defines "sceneId", "scrollDownVal", and "scrollSpeed".
+            if(scrollDownArray == undefined) {
+                try {
+                    const scrollDownMapJson = await fetchScrollDownMapJson();
+                    const scrollDownMap = new Map(Object.entries(scrollDownMapJson));
+                    scrollDownArray = scrollDownMap.get("scrollDownArray");
+                    numOfScenes = scrollDownArray.length;
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+
+            if (stopAtIndex == -1) {
+                stopAtIndex = scrollDownArray.length - 1;
+            }
+
+            // Iterate scrollDownArray.
+            // Process item append and scene scroll while cancelScroll is set to false.
+            // "scrollDownVal" needs to be adjusted with "adjustVal" for device used.
+            // Each scene has its own "sceneProcess" object to keep track of 
+            // the state. The object is stored in sceneProcessTracker array.
+            // At the start of the scene process, the state is set as "started" and 
+            // "itemAppended" is set as false.
+            // When items are appended, then "itemAppended" is changed to true.
+            // When window is scrolled, the state is changed to "done".
+            // 
+            // If auto-scroll is paused before items are appended and/or animation completed, it 
+            // indicates that the scene was paused before auto-scroll began.
+            // "itemAppended" == false
+            // "state" == "started"
+            // 
+            // If auto-scroll is paused after items are appended but before scroll is 
+            // completed, it indicates that the scene was paused after the items were 
+            // appended and animation reached the end, but scroll is stopped before 
+            // reaching the bottom.
+            // "itemAppended" == true
+            // "state" == "started"
+            //
+            // If auto-scroll is paused after items are appended and scroll is completed, 
+            // it indicates that the scene is done.
+            // "itemAppended" == true
+            // "state" == "done"
+            for(let i = sceneIndex; i <= stopAtIndex; i++) {
+                currentSceneId = scrollDownArray[i]["id"];
+                if(!cancelScroll) {
+                    const scrollDownVal = scrollDownArray[i]["scrollDownVal"] * adjustVal;
+                    const scrollSpeed = scrollDownArray[i]["scrollSpeed"] / speedIncrease;
+                    const delayBeforeScroll = scrollDownArray[i]["delayBeforeScroll"] / speedIncrease;
+
+                    console.log("scrollSpeed: " + scrollSpeed);
+                    console.log("delayBeforeScroll: " + delayBeforeScroll);
+
+                    let sceneProcess = {
+                        "sceneId": currentSceneId,
+                        "state": "started",
+                        "itemAppended": false
+                    }
+
+                    sceneProcessTracker.push(sceneProcess);
+
+                    const arrayIndex = sceneProcessTracker.length - 1;
+
+                    try {
+                        const itemAppendResult = await appendItemRevised(currentSceneId, speedIncrease);
+                    } catch (error) {
+                        console.error(error);
+                    }
+
+                    sceneProcess.itemAppended = true;
+                    sceneProcessTracker[arrayIndex] = sceneProcess;
+
+                    
+                    if(enableAutoScroll) {
+                        try {
+                            const scrollerFunctionResult = await scrollerFunction(scrollDownVal, scrollSpeed, delayBeforeScroll);
+                            currentScrollTop = baseCanvas.scrollTop;
+                        } catch(error) {
+                            console.error(error);
+                        }
+                    }
+
+                    sceneProcess.state = "done";
+
+                    sceneProcessTracker[arrayIndex] = sceneProcess;
+
+                } else {
+                    break;
+                }
+            }
+
+            console.log("**************************");
+            for(let i = 0; i < sceneProcessTracker.length; i++) {
+                console.log(sceneProcessTracker[i]);
+                console.log("\n");
+            }
+            console.log("**************************");
+
+            // Enable user-scroll after baseCanvas reaches the bottom.
+            enableUserScroll();
+        }
+
+
+        // Function to handle user click on baseCanvas.
+        // If cancelScroll is set to false, meaning that auto-scroll is playing,
+        // then pause auto-scroll and clear all timers.
+        // Change display setting of "fullCover" to "block" and show "pause" button by 
+        // calling changeMediaBtn function.
+        async function handleClickRevised(event) {
+            const isAllDone = checkIfAllDone();
+            
+            if(isAllDone) {
+                fullCover.style.display = "block";
+                await changeMediaBtn("replay");
+                fullCover.style.display = "none";
+            } else {
+                if(!cancelScroll) {
+                    // Display "pause" button.
+                    fullCover.style.display = "block";
+                    await changeMediaBtn("pause");
+                    fullCover.style.display = "none";
+                } else {
+                    fullCover.style.display = "block";
+                    await changeMediaBtn("kokokara_motokara");
+                    fullCover.style.display = "none";
+
+                    // // Display "play" button.
+                    // fullCover.style.display = "block";
+                    // await changeMediaBtn("play");
+                    // fullCover.style.display = "none";
+                }
+            }
+        }
+
+
+
+        // Function to handle user click on base canvas.
+        // If "cancelScroll" is set to false, then pause auto-scroll and 
+        // clear timers.
+        // If "cancelScroll" is set to true, then resume cancelled animations and 
+        // resume auto-scroll.
+        async function handleClick(event) {
+            if(!cancelScroll) {
+
+                // Cancel auto-scroll
+                cancelScroll = true;
+
+                // Get scrollTop of baseCanvas at "paused".
+                scrollTopAtPause = baseCanvas.scrollTop;
+
+                // Get sceneId where auto-scroll is paused.
+                sceneIdAtPause = currentSceneId;
+
+                // To prevent premature "resume" until all "paused" calculations are done,
+                // disable user "click" from baseCanvas.
+                // This event listener is restored at the bottom of this code block.
+                baseCanvas.removeEventListener("click", handleClick);
+
+                // This clears timeout set in scrollerFunction setTimeout.
+                for(const x of delayBeforeScrollTimeoutArray) {
+                    clearTimeout(x);
+                }
+
+                // This clears timeout for itemAppendTimeoutId in appendItem function.
+                for(const x of itemAppendTimeoutArray) {
+                    clearTimeout(x);
+                }
+
+                // This clears timeout for sendResolveTimeoutId in appendItem function.
+                for(const x of sendResolveTimeoutArray) {
+                    clearTimeout(x);
+                }
+
+                // Cancel animation frame set in scrollerFunction.
+                if(animationId) {
+                    cancelAnimationFrame(animationId);
+                }
+
+                // Iterate itemStateTracker and "pause" animation for items with extras.
+                // Change animationState from "playing" to "pause".
+                // The "pause" process differs by animation type, refer to comments on each type.
+                for(let i = 0; i < itemStateTracker.length; i++) {
+                    if(itemStateTracker[i].extras) {
+                        if(itemStateTracker[i].extras.animationState == "playing") {
+                            const animationType = getAnimationTypeByItemId(sceneIdAtPause, itemStateTracker[i].targetId);
+
+                            // Pause "scaleUp" or "scaleDown" animation by setting animation to "none".
+                            if(animationType == "scaleUp" || animationType == "scaleDown") {
+                                const targetDiv = document.getElementById(itemStateTracker[i].extras.targetId);
+                                const targetDivWidthAtCancel = targetDiv.getBoundingClientRect().width;
+                                const targetDivHeightAtCancel = targetDiv.getBoundingClientRect().height;
+                                targetDiv.style.width = targetDivWidthAtCancel + "px";
+                                targetDiv.style.height = targetDivHeightAtCancel + "px";
+                                targetDiv.style.animation = "none";
+
+                                const leftPosAtCancel = Math.floor(itemStateTracker[i].extras.imgCenterX - (targetDivWidthAtCancel / 2));
+                                const topPosAtCancel = Math.floor(itemStateTracker[i].extras.imgCenterY - (targetDivHeightAtCancel / 2));
+                                targetDiv.style.left = leftPosAtCancel + "px";
+                                targetDiv.style.top = topPosAtCancel + "px";
+
+                                itemStateTracker[i].extras.animationState = "paused";
+                            }
+
+                            // Pause "sideScroll" animation by setting animation to "none".
+                            // To keep the "paused" state, set current left position to style.
+                            // Add "pausedTime" to extras. This is required to calculate the remaining 
+                            // duration for animation on resume.
+                            if(animationType == "sideScroll") {
+                                const targetDiv = document.getElementById(itemStateTracker[i].extras.targetId);
+                                const pausedTime = performance.now();
+                                const computedStyleLeft = window.getComputedStyle(targetDiv).getPropertyValue("left");
+                                targetDiv.style.left = computedStyleLeft;
+                                itemStateTracker[i].extras.xPos = computedStyleLeft;
+                                itemStateTracker[i].extras.animationState = "paused";
+                                itemStateTracker[i].extras["paused"] = pausedTime;
+                                targetDiv.style.animation = "none";
+                            }
+
+                            // Pause "shake" animation by setting animation to "none".
+                            // Get timestamp of "paused" time and save it in the "extras".
+                            // Also set "animationState" in "extras" to "paused".
+                            if(animationType == "shake") {
+                                const targetDiv = document.getElementById(itemStateTracker[i].extras.targetId);
+                                const pausedTime = performance.now();
+                                itemStateTracker[i].extras.animationState = "paused";
+                                itemStateTracker[i].extras.shakePaused = pausedTime;
+                                targetDiv.style.animation = "none";
+                            }
+
+                            // Pause "growShrinkGrow" animation by setting animation to "none".
+                            // Get the current width and keep the width when "paused" by setting it to the element.
+                            if(animationType == "growShrinkGrow") {
+                                const pausedTime = performance.now();
+                                itemStateTracker[i].extras.growPaused = pausedTime;
+                                const targetDiv = document.getElementById(itemStateTracker[i].extras.targetId);
+
+                                const widthAtCancel = targetDiv.getBoundingClientRect().width;
+                                targetDiv.style.width = widthAtCancel + "px";
+
+                                targetDiv.style.animation = "none";
+
+                                itemStateTracker[i].extras.animationState = "paused";
+                            }
+                        }
+                    }
+                }
+
+                // Display "pause_btn".
+                const toggleMediaBtnResult = await changeMediaBtn("pause");
+
+                enableUserScroll();
+
+                // Restore event listener that is removed at the top of this code block.
+                // For safe measure, set timeout of 2 seconds before restoring.
+                setTimeout(() => {
+                    baseCanvas.addEventListener("click", handleClickRevised);
+                }, 2000);
+            } else {
+                // Resume auto-scroll.
+
+
+
+                // Toggle media button
+                const toggleMediaBtnResult = await changeMediaBtn("play");
+                
+                disableUserScroll();
+                cancelScroll = false;
+
+                // If scrollTop position is different from where it was paused, then 
+                // scroll to resume position.
+                // Remove "click" event listener until scroll is done.
+                baseCanvas.removeEventListener("click", handleClick);
+
+                if(scrollTopAtPause < baseCanvas.scrollTop || scrollTopAtPause > baseCanvas.scrollTop) {
+                    const positionDiff = scrollTopAtPause - baseCanvas.scrollTop;
+                    const scrollToResumeResult =  await scrollerFunction(positionDiff, 1000, 100);
+                }
+
+
+                baseCanvas.addEventListener("click", handleClick);
+
+                // Iterate itemStateTracker and append "isAppended == false" items.
+                // Iterate itemStateTracker and resume "paused" animations.
+                try {
+                    const itemAppendResult = await appendItemRevised(sceneIdAtPause);
+                } catch (error) {
+                    console.log(error);
+                }
+            
+                // Scroll remaining distance of the "paused" scene.
+                // Iterate scrollDownArray and get the sum of all "scrollDownVal" 
+                // to the point of "sceneIdAtPause". 
+                // Then subtract "scrollTopAtPause" from the sum to get the 
+                // remaining scroll distance.
+                // Must factor in adjust value.
+                //
+                // To calculate "scrollSpeed" for scrollerFunction...
+                // A: scrollDownValSum
+                // B: fullScrollDownVal, full scrollDownVal of sceneIdAtPause(scrollDownArray[i]["scrollDownVal"])
+                // C: scrollTopAtPause
+                // D: scrollDownSumBefore, A - B, which is the sum of scrollDownVals just before paused scene.
+                // E: progressDistance, C - D, which represents the actual scroll progress in distance made before paused.
+                // F: progressPercentage = E / B
+                // G: revisedScrollSpeed
+                //
+                // If "revisedScrollSpeed" is below 300 milliseconds, then set it to 300.
+                let scrollDownValSum = 0;
+                let scrollDownValSumBefore = 0;
+                let fullScrollDownVal = 0;
+                let defaultScrollSpeed = 0;
+                let fullDelayBeforeScroll = 0;
+
+                // This specifies the index of next scene in scrollDownArray.
+                // Pass this as a parameter when calling processMain function at 
+                // the bottom of this code block.
+
+                for(let i = 0; i < scrollDownArray.length; i++) {
+                    scrollDownValSum += scrollDownArray[i]["scrollDownVal"] * adjustVal;
+
+                    if(scrollDownArray[i]["id"] == sceneIdAtPause) {
+                        scrollDownValSumBefore = scrollDownValSum - (scrollDownArray[i]["scrollDownVal"] * adjustVal);
+                        fullScrollDownVal = scrollDownArray[i]["scrollDownVal"] * adjustVal;
+                        defaultScrollSpeed = scrollDownArray[i]["scrollSpeed"];
+                        fullDelayBeforeScroll = scrollDownArray[i]["delayBeforeScroll"];
+                        sceneIndex = i + 1;
+                        break;
+                    }
+                }
+
+                const remainingScrollVal = scrollDownValSum - scrollTopAtPause;
+
+                const progressDistance = scrollTopAtPause - scrollDownValSumBefore;
+                const progressPercentage = progressDistance / fullScrollDownVal;
+                let revisedScrollSpeed = defaultScrollSpeed * (1 - progressPercentage);
+
+                if(revisedScrollSpeed < 300) {
+                    revisedScrollSpeed = 300;
+                }
+                
+                try {
+                    const scrollerFunctionResult = await scrollerFunction(remainingScrollVal, revisedScrollSpeed.toFixed(2), fullDelayBeforeScroll);
+                } catch(error) {
+                    console.log(error);
+                }
+
+                processMain(sceneIndex, 20);
+            }
+        }
+
+
+        function getItemState(itemId) {
+            let itemState;
+            for(let i = 0; i < itemStateTracker.length; i++) {
+                if(itemStateTracker[i].targetId == itemId) {
+                    itemState = itemStateTracker[i];
+                    break;
+                }
+            }
+
+            return itemState;
+        }
+
+
+        // Iterate itemStateTracker and check if item's "isAppended" state.
+        // 
+        // [0] New item. Item is never called. Proceed with default append.
+        // [1] Item is called but not appended.
+        // [2] This item is "done". Item is appended and animation is "done" if available.
+        // [3] Item is appended and animationState is "paused".
+        function getIsAppended(itemId) {
+            let itemState = undefined;
+            let result = [];
+            for(let i = 0; i < itemStateTracker.length; i++) {
+                if(itemStateTracker[i].targetId == itemId) {
+                    itemState = itemStateTracker[i];
+                    break;
+                }
+            }
+
+            if(itemState === undefined) {
+                // New item. Item is never called. Proceed with default append.
+                result = 0;
+            } else {
+                const isAppended = itemState.isAppended;
+
+                if(!isAppended) {
+                    // Item is called but not appended yet.
+                    result = 1;
+                } else {
+                    if(!itemState.extras) {
+                        // Item is already appended and has no extras object(no animation to play). 
+                        // This item is "done".
+                        result = 2;
+                    } else {
+                        if(itemState.extras.animationState == "paused") {
+                            // Item is appended and animationState is "paused"
+                            result = 3;
+                        } else if(itemState.extras.animationState == "done"){
+                            // Item is appended and animationState is "done". This item is "done".
+                            result = 2;
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+
+        // Sets timeout for n milliseconds.
+        function timeoutFunction(timeoutDuration) {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve(true);
+                }, timeoutDuration);
+            });
+        }
+
+
+        function disableUserScroll() {
+            baseCanvas.style.overflowY = "hidden";
+        }
+
+
+        function enableUserScroll() {
+            baseCanvas.style.overflowY = "scroll";
+        }
+
+
+        // Function to scroll the baseCanvas.
+        function scrollerFunction(scrollVal, scrollSpeed, delayBeforeScroll) {
+            return new Promise(function (resolve, reject) {
+                if (!cancelScroll) {
+                    const delayBeforeScrollTimeoutId = setTimeout(() => {
+                        const start = baseCanvas.scrollTop;
+                        const elementPosition = scrollVal;
+                        const startTime = performance.now();
+
+                        function scroll(time) {
+                            const elapsed = time - startTime;
+                            const progress = Math.min(elapsed / scrollSpeed, 1);
+                            const easeInOutProgress = easeInOut(progress);
+                            baseCanvas.scrollTo(0, start + elementPosition * easeInOutProgress);
+
+                            if (elapsed < scrollSpeed) {
+                                animationId = requestAnimationFrame(scroll);
+                            } else {
+                                // Check baseCanvas scrollTop to make sure it is correctly scrolled.
+                                // Return resove or reject
+                                let posA = baseCanvas.scrollTop;
+                                let posB = currentScrollTop + scrollVal;
+
+                                resolve(true);
+                            }
+                        }
+
+                        function easeInOut(t) {
+                            return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+                        }
+
+                        animationId = requestAnimationFrame(scroll);
+                    }, delayBeforeScroll);
+
+                    delayBeforeScrollTimeoutArray.push(delayBeforeScrollTimeoutId);
+                } else {
+                    reject("cancelScroll detected in scrollerFunction");
+                }
+            });
+        }
+
+
+        // Change the width of base canvas when window is resized.
+        // Also change the width of base img when base canvas width is changed.
+        window.addEventListener("resize", () => {
+            setBaseCanvasWidth();
+            baseImg.style.width = baseCanvas.style.width;
+        });
+
+
+        // For baseCanvas width, use device window width if it is less than baseCanvasMaxWidth.
+        // Otherwise, use baseCanvasMaxWidth.
+        // 
+        // Calculate the value of actual scrollDownVal based on the width of baseImg.
+        // This will adjust the vertical scroll distance based on the device used.
+        function setBaseCanvasWidth() {
+            const deviceWindowWidth = window.innerWidth;
+            const deviceWindowHeight = window.innerHeight;
+
+            if (deviceWindowWidth < baseCanvasMaxWidth) {
+                baseCanvas.style.width = deviceWindowWidth + "px";
+                adjustVal = deviceWindowWidth / defaultImgWidth;
+            } else {
+                baseCanvas.style.width = baseCanvasMaxWidth + "px";
+                adjustVal = baseCanvasMaxWidth / defaultImgWidth;
+            }
+
+            console.log("adjustVal: " + adjustVal);
+
+            baseCanvas.style.height = deviceWindowHeight + "px";
+        }
+
+
+        function loadBaseImg() {
+            // baseImg = document.createElement("img");
+            // baseImg.style.width = baseCanvas.style.width;
+            // baseImg.setAttribute("src", contentFilePath + "manga_pages_6.png");
+            // baseCanvas.appendChild(baseImg);
+            baseImg = document.createElement("img");
+            baseImg.style.width = baseCanvas.style.width;
+            baseImg.setAttribute("src", contentFilePath + "manga_pages_6.png");
+            baseImgWrapper.appendChild(baseImg);
+        }
+
+
+        // Fetch itemMap in json from github repository.
+        function fetchItemMapJson() {
+            return new Promise((resolve, reject) => {
+                fetch(itemMapJsonURL)
+                    .then(response => {
+                        if(!response) {
+                            throw new Error();
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        resolve(data);
+                    })
+                    .catch(error => {
+                        reject(error);
+                    });
+            });
+        }
+
+
+        // Convert json file to map after calling fetchItemMapJson.
+        // Map itemMap holds all the items to append with animation parameters.
+        function prepareItemMap() {
+            fetchItemMapJson()
+                .then(data => {
+                    itemMap = new Map(Object.entries(data));
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        }
+
+
+        // Fetch scrollDownVal in json from github repository.
+        function fetchScrollDownMapJson() {
+            return new Promise((resolve, reject) => {
+                fetch(scrollDownMapJsonURL)
+                    .then(response => {
+                        if(!response) {
+                            throw new Error();
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        resolve(data);
+                    })
+                    .catch(error => {
+                        reject(error);
+                    });
+            });
+        }
+
+
+        
+
+
+
+
+
+    </script>
+    
+</body>
+</html>
