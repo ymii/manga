@@ -1,0 +1,2450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./mng_editor_2.css">
+</head>
+<body>
+    <div class="header">
+
+    </div>
+    <div id="sidebar_wrapper">
+        <div class="toggle_sidebar_wrapper">
+            <img id="minimize_btn" src="/Users/mii/Desktop/manga/editor_icons/minimize_btn.png">
+            <img id="maximize_btn" src="/Users/mii/Desktop/manga/editor_icons/maximize_btn.png">
+            <!-- <img id="minimize_btn" src="F:\\240119\\manga\\editor_icons\\minimize_btn.png">
+            <img id="maximize_btn" src="F:\\240119\\manga\\editor_icons\\maximize_btn.png"> -->
+        </div>
+        <div class="editor_header_wrapper" id="editor_header_wrapper">
+            <div class="editor_header" id="img_gallery_header">画像一覧</div>
+            <div class="editor_header" id="img_editor_header">画像編集</div>
+            <div class="editor_header" id="animation_editor_header">アニメーション</div>
+            <div class="editor_header" id="scroll_management_header">スクロール設定</div>
+        </div>
+        <div id="img_gallery_wrapper">
+            <div id="img_gallery">
+            </div>
+        </div>
+        <div id="img_editor_wrapper">
+            <!-- Image X and Y editor -->
+            <div class="img_editor">
+                <p class="component_label">画像位置</p>
+                <div class="number_component">
+                    <label for="img_x_editor">X<span class="colon">:</span></label>
+                    <input type="number" id="img_x_editor" name="img_x_editor" value="" min="0">
+                </div>
+                <div class="number_component">
+                    <label for="img_y_editor">Y<span class="colon">:</span></label>
+                    <input type="number" id="img_y_editor" name="img_y_editor" value="" min="0">
+                </div>
+            </div>
+            <!-- Image width and height editor -->
+            <div class="img_editor">
+                <p class="component_label">画像サイズ</p>
+                <div class="number_component">
+                    <label for="img_width_editor">W<span class="colon">:</span></label>
+                    <input type="number" id="img_width_editor" name="img_width_editor" value="" min="0">
+                </div>
+                <div class="number_component">
+                    <label for="img_height_editor">H<span class="colon">:</span></label>
+                    <input type="number" id="img_height_editor" name="img_height_editor" value="" min="0">
+                </div>
+                <div class="custom_checkbox_component">
+                    <span>
+                        <img id="width_height_checkbox" class="custom_checkbox"
+                            src="/Users/mii/Desktop/manga/editor_icons/filled_dot.png">
+                        <!-- <img id="width_height_checkbox" class="custom_checkbox" src="F:\\240119\\manga\\editor_icons\\filled_dot.png"> -->
+                    </span>
+                    <span class="component_description">縦横の比率を維持</span>
+                </div>
+            </div>
+            <!-- Image rotate editor -->
+            <div class="img_editor">
+                <p class="component_label">画像角度</p>
+                <div class="number_component">
+                    <label for="img_rotate_editor">Deg<span class="colon">:</span></label>
+                    <input type="number" id="img_rotate_editor" name="img_roate_editor" value="" min="0">
+                </div>
+            </div>
+    
+        </div>
+        <div id="animation_editor_wrapper">
+            <div class="animation_editor">
+                <p class="component_label">スケールアニメーション</p>
+                <div class="number_component">
+                    <label for="initial_scale_editor">初期値<span class="colon">:</span></label>
+                    <input type="number" id="initial_scale_editor" name="initial_scale_editor" value="1" min="0">
+                </div>
+                <div class="number_component">
+                    <label for="scale_to_editor">スケール値<span class="colon">:</span></label>
+                    <input type="number" id="scale_to_editor" name="scale_to_editor" value="1" min="1">
+                </div>
+                <div class="number_component">
+                    <label for="angle_to_editor">角度<span class="colon">:</span></label>
+                    <input type="number" id="angle_to_editor" name="angle_to_editor" value="0" min="0">
+                </div>
+                <div class="number_component">
+                    <label for="delay_before_append_editor">追加待機<span class="colon">:</span></label>
+                    <input type="number" id="delay_before_append_editor" name="delay_before_append_editor" value="0"
+                        min="0">
+                </div>
+                <div class="number_component">
+                    <label for="scale_delay_editor">待機時間<span class="colon">:</span></label>
+                    <input type="number" id="scale_delay_editor" name="scale_delay_editor" value="0" min="0">
+                </div>
+                <div class="number_component">
+                    <label for="scale_duration_editor">変化時間<span class="colon">:</span></label>
+                    <input type="number" id="scale_duration_editor" name="scale_duration_editor" value="0" min="0">
+                </div>
+                <div class="btn_component">
+                    <div class="preview_btn" id="scale_animation_preview_btn">プレビュー</div>
+                    <div class="save_animation_btn" id="scale_animation_save_btn">保存</div>
+                </div>
+            </div>
+        </div>
+        <div id="scroll_management_wrapper">
+            <div class="scroll_editor">
+                <div class="number_component">
+                    <label for="scroll_start_editor">開始位置<span class="colon">:</span></label>
+                    <input type="number" id="scroll_start_editor" name="scroll_start_editor" value="0" min="0">
+                    <span class="scroll_set_btn" id="scroll_start_set_btn">設定</span>
+                </div>
+                <div class="custom_checkbox_component">
+                    <span>
+                        <img id="use_last_scroll_end_checkbox" class="custom_checkbox" src="/Users/mii/Desktop/manga/editor_icons/empty_dot.png">
+                    </span>
+                    <span class="component_description">直前の終了位置を開始位置として使用</span>
+                </div>
+                <div class="number_component">
+                    <label for="scroll_to_editor">終了位置<span class="colon">:</span></label>
+                    <input type="number" id="scroll_to_editor" name="scroll_to_editor" value="0" min="0">
+                    <span class="scroll_set_btn" id="scroll_end_set_btn">設定</span>
+                </div>
+                <div class="number_component">
+                    <label for="scroll_delay_editor">待機時間<span class="colon">:</span></label>
+                    <input type="number" id="scroll_delay_editor" name="scroll_delay_editor" value="0" min="0">
+                    <span class="empty_set_btn"></span>
+                </div>
+                <div class="number_component">
+                    <label for="scroll_duration_editor">スクロール時間<span class="colon">:</span></label>
+                    <input type="number" id="scroll_duration_editor" name="scroll_duration_editor" value="1" min="1">
+                    <span class="empty_set_btn"></span>
+                </div>
+            </div>
+            <div class="btn_component" id="preview_scroll_btn">プレビュー</div>
+            <div class="btn_component" id="add_scroll_btn">スクロールを追加</div>
+        </div>
+    </div><!-- ./ "sidebar_wrapper" -->
+    
+    <div id="container">
+        <div id="canvas_outer">
+            <div id="canvas">
+                <div id="smartphone_window"></div>
+                <!-- <img id="smartphone_window" src="/Users/mii/Desktop/manga/demo_img/assets/iphone_base.png"> -->
+                <!-- <img id="smartphone_window" src="F:\\240119\\manga\\demo_img\\assets\\iphone_base.png"> -->
+            </div>
+        </div>
+
+        <div id="viewer_wrapper">
+            <img id="iphone_mock" src="/Users/mii/Desktop/manga/manga_editor/iphone_mock.png">
+            <img id="iphone_inside_camera" src="/Users/mii/Desktop/manga/manga_editor/iphone_inside_camera.png">
+            <div id="viewer_window">
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom_wrapper">
+        <div class="bottom_function_wrapper">
+
+        </div>
+        <div id="scene_management_wrapper_re">
+            <div class="scene_management_header_wrapper">
+                <span class="scene_management_title_header">Name</span>
+                <span class="timeline_header">Timeline</span>
+            </div>
+            <div id="scene_management_name_timeline_wrapper">
+                <div id="scene_management_name" class="scene_management_name_style">
+                    <!-- <div id="foo_1">foo1</div> -->
+                </div>
+                <div id="scene_management_timeline" class="scene_management_timeline_style">
+                    <!-- <div id="timeline_foo_1">
+                        <span class="delay_before_append_style"></span>
+                        <span class="animation_delay_style"></span>
+                        <span class="animation_duration_style"></span>
+                    </div> -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    
+
+    
+
+
+
+
+    <div id="dialog_box">
+        ベース画像を選択してください。
+    </div>
+
+    <div id="zoom_btn_wrapper">
+        <img id="zoom_in_btn" src="/Users/mii/Desktop/manga/editor_icons/zoom_in.png">
+        <img id="zoom_out_btn" src="/Users/mii/Desktop/manga/editor_icons/zoom_out.png">
+    </div>
+
+    <span class="log" id="log1"></span>
+    <span class="log" id="log2"></span>
+    <span class="log" id="log3"></span>
+
+    <span class="log" id="logMaps">log maps</span>
+
+    <script>
+        let browserWidth;
+        let browserHeight;
+
+        const iphoneAspectRatio = 2.166;
+
+        let smartphoneWindowLeft;
+        let smartphoneWindowRight;
+        let smartphoneWindowTop;
+        let smartphoneWindowBottom;
+        let smartphoneWindowHeight;
+
+        const containerWidthMin = 800;
+        const containerHeightMin = 500;
+
+        const headerHeight = 30;
+
+        const sidebarWrapperHeightMin = 450;
+        const sidebarWrapperMinimizeWidth = 40;
+        const sidebarWrapperMaximizeWidth = 260;
+
+        const container = document.getElementById("container");
+
+        const canvas = document.getElementById("canvas");
+        const smartphoneWindow = document.getElementById("smartphone_window");
+        const canvasOuter = document.getElementById("canvas_outer");
+
+        const sidebarWrapper = document.getElementById("sidebar_wrapper");
+
+        const minimizeBtn = document.getElementById("minimize_btn");
+        const maximizeBtn = document.getElementById("maximize_btn");
+
+        const dialogBox = document.getElementById("dialog_box");
+
+        let baseImgIsSet = false;
+        let isNewProject = true;
+
+        const editorHeaderWrapper = document.getElementById("editor_header_wrapper");
+        const imgGalleryHeader = document.getElementById("img_gallery_header");
+        const imgEditorHeader = document.getElementById("img_editor_header");
+        const animationEditorHeader = document.getElementById("animation_editor_header");
+        const scrollManagementHeader = document.getElementById("scroll_management_header");
+
+        const imgGallery = document.getElementById("img_gallery");
+        let imgFileCount = 0;
+        const imgFilePath = "/Users/mii/Desktop/manga/demo_img/assets/";
+        // const imgFilePath = "F:\\240119\\manga\\demo_img\\assets\\";
+        // const imgFilePath = "F:\\240119\\manga\\mask_pics\\";
+        // const imgFilePath = "/Users/mii/Desktop/manga/mask_pics/";
+        let targetImg = undefined;
+        let transferedImg = undefined;
+
+        let isDraggable = false;
+
+        const imgGalleryWrapper = document.getElementById("img_gallery_wrapper");
+        const imgEditorWrapper = document.getElementById("img_editor_wrapper");
+        const animationEditorWrapper = document.getElementById("animation_editor_wrapper");
+        const scrollManagementWrapper = document.getElementById("scroll_management_wrapper");
+
+        let canvasLeft;
+        let canvasTop;
+        let canvasRight;
+        let canvasBottom;
+        let canvasWidth;
+        let canvasHeight;
+        let canvasMargin;
+        const canvasBorderWidth = 2;
+
+        const imgXEditor = document.getElementById("img_x_editor");
+        const imgYEditor = document.getElementById("img_y_editor");
+
+        const imgWidthEditor = document.getElementById("img_width_editor");
+        const imgHeightEditor = document.getElementById("img_height_editor");
+
+        const imgRotateEditor = document.getElementById("img_rotate_editor");
+
+        const xDragMin = 0;
+        let xDragMax;
+
+        const yDragMin = 0;
+        let yDragMax;
+
+        const widthHeightCheckbox = document.getElementById("width_height_checkbox");
+        let widthHeightAspectRatioChecked = true;
+
+        let offsetObj = {
+            mouseOffsetX: 0,
+            mouseOffsetY: 0,
+            renderedOffsetX: 0,
+            renderedOffsetY: 0
+        }
+
+        const initialScaleEditor = document.getElementById("initial_scale_editor");
+        const scaleToEditor = document.getElementById("scale_to_editor");
+        const angleToEditor = document.getElementById("angle_to_editor");
+        const delayBeforeAppendEditor = document.getElementById("delay_before_append_editor");
+        const scaleDelayEditor = document.getElementById("scale_delay_editor");
+        const scaleDurationEditor = document.getElementById("scale_duration_editor");
+        const scaleAnimationPreviewBtn = document.getElementById("scale_animation_preview_btn");
+        const scaleAnimationSaveBtn = document.getElementById("scale_animation_save_btn");
+        const addScrollBtn = document.getElementById("add_scroll_btn");
+
+        const scrollStartSetBtn = document.getElementById("scroll_start_set_btn");
+        const scrollEndSetBtn = document.getElementById("scroll_end_set_btn");
+        let scrollStartVal = 0;
+        let scrollStartValIsSet = false;
+        let scrollEndVal = 0;
+        let scrollEndValIsSet = false;
+        const scrollStartEditor = document.getElementById("scroll_start_editor");
+        const scrollToEditor = document.getElementById("scroll_to_editor");
+        let useLastScrollEndCheckbox = document.getElementById("use_last_scroll_end_checkbox");
+        let useLastScrollEndPosChecked = false;
+        const scrollDelayEditor = document.getElementById("scroll_delay_editor");
+        const scrollDurationEditor = document.getElementById("scroll_duration_editor");
+        const previewScrollBtn = document.getElementById("preview_scroll_btn");
+
+
+
+
+
+
+
+        const zoomBtnWrapper = document.getElementById("zoom_btn_wrapper");
+        const zoomInBtn = document.getElementById("zoom_in_btn");
+        const zoomOutBtn = document.getElementById("zoom_out_btn");
+        let currentZoom = 1;
+
+        let imgMap = {};
+        let animationMap = {};
+        let itemTimerAscendingOrderArray = [];
+
+
+        let mouseDownX;
+        let mouseDownY;
+
+        const viewerWrapper = document.getElementById("viewer_wrapper");
+        const iphoneMock = document.getElementById("iphone_mock");
+        const iphoneInsideCamera = document.getElementById("iphone_inside_camera");
+        const viewerWindow = document.getElementById("viewer_window");
+
+
+        const sceneManagementName = document.getElementById("scene_management_name");
+        let sceneManagementDragElement
+        let sceneManagementArray = [];
+        const sceneManagementTimeline = document.getElementById("scene_management_timeline");
+
+        
+        let scrollMap = {};
+        let scrollIdVal = 0;
+        let currentScrollMin = 0;
+
+
+
+
+        const foo1 = document.getElementById("foo_1");
+        const foo2 = document.getElementById("foo_2");
+        const foo3 = document.getElementById("foo_3");
+        const foo4 = document.getElementById("foo_4");
+        const foo5 = document.getElementById("foo_5");
+
+        const log1 = document.getElementById("log1");
+        const log2 = document.getElementById("log2");
+        const log3 = document.getElementById("log3");
+        const logMaps = document.getElementById("logMaps");
+
+
+
+        const imgFilesJson = {
+                "fileCount": 12,
+                "files": [
+                    {
+                        "id": "male_1",
+                        "fileName": "male_1.jpeg",
+                        "width": "200"
+                    },
+                    {
+                        "id": "male_2",
+                        "fileName": "male_2.jpeg",
+                        "width": "100"
+                    },
+                    {
+                        "id": "male_3",
+                        "fileName": "male_3.jpeg",
+                        "width": "200"
+                    },
+                    {
+                        "id": "male_4",
+                        "fileName": "male_4.jpeg",
+                        "width": "100"
+                    },
+                    {
+                        "id": "male_5",
+                        "fileName": "male_5.jpeg",
+                        "width": "200"
+                    },
+                    {
+                        "id": "male_6",
+                        "fileName": "male_6.jpeg",
+                        "width": "100"
+                    },
+                    {
+                        "id": "male_7",
+                        "fileName": "male_7.jpeg",
+                        "width": "200"
+                    },
+                    {
+                        "id": "male_8",
+                        "fileName": "male_8.jpeg",
+                        "width": "100"
+                    },
+                    {
+                        "id": "male_9",
+                        "fileName": "male_9.jpeg",
+                        "width": "200"
+                    },
+                    {
+                        "id": "male_10",
+                        "fileName": "male_10.jpeg",
+                        "width": "100"
+                    },
+                    {
+                        "id": "male_11",
+                        "fileName": "male_11.jpeg",
+                        "width": "200"
+                    },
+                    {
+                        "id": "male_12",
+                        "fileName": "male_12.jpeg",
+                        "width": "100"
+                    }
+                ]
+            }
+
+        // const imgFilesJson = {
+        //         "fileCount": 4,
+        //         "files": [
+        //             {
+        //                 "id": "mask_1",
+        //                 "fileName": "mask_1.jpg",
+        //                 "width": "200"
+        //             },
+        //             {
+        //                 "id": "mask_2",
+        //                 "fileName": "mask_2.jpeg",
+        //                 "width": "300"
+        //             },
+        //             {
+        //                 "id": "mask_3",
+        //                 "fileName": "mask_3.jpeg",
+        //                 "width": "250"
+        //             },
+        //             {
+        //                 "id": "mask_4",
+        //                 "fileName": "mask_4.jpg",
+        //                 "width": "200"
+        //             }
+        //         ]
+        //     }
+
+        logMaps.addEventListener("click", () => {
+            console.log(JSON.stringify(imgMap));
+            console.log(JSON.stringify(animationMap));
+            console.log(JSON.stringify(itemTimerAscendingOrderArray));
+        });
+
+
+        window.addEventListener("DOMContentLoaded", (event) => {
+            getBrowserSize();
+            setContainerSize();
+            
+            setCanvasSize();
+            
+            containerScrollTo();
+
+            setCanvasValues();
+            setSmartphoneWindowPosition();
+            parseImgFileJson();
+
+            setDialogBoxPosition();
+
+            setZoomBtnWrapperPosition();
+            
+            
+        });
+
+
+        window.addEventListener("resize", () => {
+            console.log("resize");
+            getBrowserSize();
+            setContainerSize();
+            setCanvasSize();
+            //setSmartphoneWindowPosition();
+            // setCanvasValues();
+
+            setDialogBoxPosition();
+        });
+
+
+        useLastScrollEndCheckbox.addEventListener("click", (event) => {
+            event.preventDefault();
+
+            if(!useLastScrollEndPosChecked) {
+                useLastScrollEndCheckbox.src = "/Users/mii/Desktop/manga/editor_icons/filled_dot.png";
+                useLastScrollEndPosChecked = true;
+
+            } else {
+                useLastScrollEndCheckbox.src = "/Users/mii/Desktop/manga/editor_icons/empty_dot.png";
+                useLastScrollEndPosChecked = false;
+            }
+
+        });
+
+
+        // Set scroll start value when clicked
+        scrollStartSetBtn.addEventListener("click", (event) => {
+            event.preventDefault();
+
+            scrollStartVal = scrollStartEditor.value;
+            scrollStartValIsSet = true;
+
+        });
+
+        
+        scrollEndSetBtn.addEventListener("click", (event) => {
+            event.preventDefault();
+
+            scrollEndVal = scrollToEditor.value;
+            scrollEndValIsSet = true;
+        });
+
+        
+        viewerWindow.addEventListener("wheel", (event) => {
+            if(!scrollStartValIsSet) {
+                scrollStartEditor.value = viewerWindow.scrollTop;
+            } else {
+                scrollStartEditor.value = scrollStartVal;
+            }
+            
+            scrollToEditor.value = viewerWindow.scrollTop;
+
+
+        });
+
+
+        previewScrollBtn.addEventListener("click", (event) => {
+            event.preventDefault();
+
+            if(scrollStartValIsSet && scrollEndValIsSet) {
+                viewerWindowScrollTo(scrollStartVal);
+            }
+
+        });
+
+
+        // Scroll viewerWindow for preview.
+        // Scroll to scrollStartVal before calling scrollerFunction
+        function previewScroll(scrollStartVal, scrollEndVal) {
+            viewerWindowScrollTo(scrollStartVal);
+
+        }
+
+
+        function viewerWindowScrollTo(scrollToVal) {
+            viewerWindow.scrollTo({
+                top: scrollToVal,
+                behavior: "smooth"
+            });
+        }
+
+
+        // Create scroll object and add to scroll map
+        addScrollBtn.addEventListener("click", (event) => {
+            event.preventDefault();
+
+            if(scrollStartValIsSet && scrollEndValIsSet) {
+                scrollIdVal += 1;
+                const scrollId = "scroll_" + scrollIdVal;
+
+                const scrollDelayVal = scrollDelayEditor.value;
+                const scrollDurationVal = scrollDurationEditor.value;
+
+                alert(scrollDelayVal);
+                alert(scrollDurationVal);
+
+                scrollMap[scrollId] = {
+                    scrollStartPos: scrollStartVal,
+                    scrollToPos: scrollEndVal,
+                    delayBeforeScroll: scrollDelayVal,
+                    scrollDuration: scrollDurationVal
+                };
+            } else {
+                // Show warning "開始位置、終了位置が設定されていません。" in dialog
+
+
+            }
+
+
+
+        });
+
+        
+
+
+        // Not Using
+        addScrollBtn.addEventListener("NOT USING", (event) => {
+            event.preventDefault();
+
+            const scrollToVal = scrollToEditor.value;
+            scrollIdVal += 1;
+            const scrollId = "scroll_" + scrollIdVal;
+
+            scrollMap[scrollId] = {
+                scrollStartPos: scrollStartVal,
+                scrollToPos: scrollToVal,
+                delayBeforeScroll: 1,
+                scrollDuration: 0.5
+            }
+
+            console.log(JSON.stringify(scrollMap));
+
+            currentScrollMin = scrollToVal;
+
+            setElementsToSceneManagement(scrollId, "scroll");
+
+            // const sceneManagementArrayElement = {
+            //     type: "scroll",
+            //     id: scrollId
+            // };
+
+            // sceneManagementArray.push(sceneManagementArrayElement);
+
+            console.log(JSON.stringify(sceneManagementArray));
+            
+            
+        });
+
+
+
+        // Get canvas values.
+        function setCanvasValues() {
+            canvasLeft = canvas.getBoundingClientRect().left + 1;
+            canvasRight = canvas.getBoundingClientRect().right + 1;
+            canvasTop = canvas.getBoundingClientRect().top + 1;
+            canvasBottom = canvas.getBoundingClientRect().bottom + 1;
+            canvasWidth = parseFloat(getComputedStyle(canvas).width);
+            canvasHeight = parseFloat(getComputedStyle(canvas).height);
+            canvasMargin = parseFloat(getComputedStyle(canvas).margin);
+
+            console.log("canvasLeft: " + canvasLeft);
+
+            // Set xDragMax value. This is the max value allowed in itemXEditor.
+            xDragMax = canvasWidth - (canvasMargin * 2);
+
+            // Set yDragMax value. This is the max value allowed in itemYEditor.
+            yDragMax = canvasHeight - (canvasMargin * 2);
+        }
+
+
+        function containerScrollTo() {
+            const leftScrollVal = (parseInt(getComputedStyle(canvasOuter).width) - browserWidth) / 2;
+
+            container.scrollTo({
+                top: 5100,
+                left: leftScrollVal,
+                behavior: "smooth"
+            });
+        }
+
+
+        // Parse imgFilesJson and append images in "imgGallery".
+        // This simulates Ajax call to server and fetching image files.
+        function parseImgFileJson() {
+            imgFileCount = imgFilesJson.fileCount;
+
+            const imgFilesArray = imgFilesJson.files;
+
+            for(let i = 0; i < imgFilesArray.length; i++) {
+                const imgFileElement = document.createElement("img");
+                imgFileElement.setAttribute("id", imgFilesArray[i].id);
+                const imgSrc = imgFilePath + imgFilesArray[i].fileName;
+                imgFileElement.src = imgSrc;
+
+                imgGallery.appendChild(imgFileElement);
+            }
+        }
+
+
+        imgGallery.addEventListener("mousedown", (event) => {
+            if(event.target.id != "img_gallery") {
+                transferedImg = document.getElementById(event.target.id);
+
+                transferedImg.addEventListener("dragstart", (ev) => {
+                    dragStartFunction(ev);
+                });
+
+                // Event listener for "dragend".
+                // Remove "cloned" img left over in "imgGallery" by 
+                // searching for elements with "cloned_" in id.
+                // Change the border color back to white.
+                transferedImg.addEventListener("dragend", () => {
+                    const childList = imgGallery.children;
+
+                    for (let i = 0; i < childList.length; i++) {
+                        const substringResult = childList[i].id.substring(0, 7);
+                        if (substringResult === "cloned_") {
+                            imgGallery.removeChild(document.getElementById(childList[i].id));
+                        }
+                    }
+                });
+            }
+        });
+
+
+        // Get image width from imgFilesJson.
+        function getImgWidthFromImgFilesJson(imgName) {
+            const imgFilesArray = imgFilesJson.files;
+            let imgWidth = 0;
+
+            for(let i = 0; i < imgFilesArray.length; i++) {
+                if(imgFilesArray[i].id == imgName) {
+                    imgWidth = imgFilesArray[i].width;
+                    break;
+                }
+            }
+
+            return imgWidth;
+        }
+
+
+        // Function to drag image from "imgGallery" to "canvas".
+        function dragStartFunction(event) {
+            if(transferedImg != undefined) {
+
+                const imgWidth = getImgWidthFromImgFilesJson(transferedImg.id);
+
+                // Get mouse x and y positions.
+                const mouseX = event.clientX;
+                const mouseY = event.clientY;
+
+                // Calculate offset values of mouse and transferedImg positions.
+                // These values are part of data transfer.
+                const transferedImgLeft = transferedImg.getBoundingClientRect().left;
+                const transferedImgTop = transferedImg.getBoundingClientRect().top;
+                const offsetLeft = mouseX - transferedImgLeft;
+                const offsetTop = mouseY - transferedImgTop;
+
+                // Create a clone of transferedImg.
+                // The cloned item has to be appended to "imgGallery" before 
+                // it can be dragged to "canvas".
+                // Set a new ID for the cloned item.
+                // id = "cloned_" + milliseconds
+                // Position the cloned item above the original.
+                const clonedTransferedImg = transferedImg.cloneNode(true);
+                const generatedId = new Date().getTime();
+                const clonedTransferedImgId = "cloned_" + generatedId + "_" + transferedImg.id;
+                clonedTransferedImg.id = clonedTransferedImgId;
+                clonedTransferedImg.style.position = "absolute";
+                clonedTransferedImg.style.left = transferedImgLeft + "px";
+                clonedTransferedImg.style.top = transferedImgTop + "px";
+
+                imgGallery.appendChild(clonedTransferedImg);
+
+                // Set data for dataTransfer.
+                event.dataTransfer.setData("targetId", clonedTransferedImgId);
+                event.dataTransfer.setData("offsetLeft", offsetLeft);
+                event.dataTransfer.setData("offsetTop", offsetTop);
+                event.dataTransfer.setData("imgWidth", imgWidth);
+            }
+        }
+
+
+        canvas.addEventListener("dragover", (event) => {
+            event.preventDefault();
+        });
+
+
+        // Prevent img drop in "imgGallery".
+        imgGallery.addEventListener("drop", (event) => {
+            event.preventDefault();
+        });
+
+    
+        // Event listener for image "drop" in "canvas" from "imgGallery".
+        canvas.addEventListener("drop", (event) => {
+            event.preventDefault();
+
+            const mouseX = event.clientX;
+            const mouseY = event.clientY;
+
+            // Get dropped data from dataTransfer and append it to "canvas".
+            // Remove transfered style, then create a new stylesheet for this 
+            // item with the id in dataTransfer.
+            // Reset the item id by adding "dropped_" at the front to prevent duplicate IDs with 
+            // cloned item in "imgGallery".
+            // Position the item with "offsetLeft" and "offsetTop" in 
+            // dataTransfer.
+            // When the item is appended to "canvas", set "draggable" to false.
+            const transferedItemId = event.dataTransfer.getData("targetId");
+            const transferedItem = document.getElementById(transferedItemId);
+            transferedItem.style.cssText = "";
+
+            const transferedItemLeft = (mouseX - event.dataTransfer.getData("offsetLeft") - canvas.getBoundingClientRect().left) / currentZoom;
+            const transferedItemTop = (mouseY - event.dataTransfer.getData("offsetTop") - canvas.getBoundingClientRect().top) / currentZoom;
+            transferedItem.id = "dropped_" + transferedItemId;  // prepend "dropped" to id
+
+            const viewerLeftPos = transferedItemLeft - parseInt(getComputedStyle(smartphoneWindow).left);
+            const viewerTopPos = transferedItemTop - parseInt(getComputedStyle(smartphoneWindow).top);
+
+
+            const transferedItemStyle = document.createElement("style");
+            transferedItemStyle.type = "text/css";
+            transferedItemStyle.id = "stylesheet_" + transferedItemId;
+            const styleTextContent = ".img_" + transferedItemId + " {\
+                position: absolute;\
+                width: " + event.dataTransfer.getData("imgWidth") + "px;\
+                top: " + transferedItemTop + "px;\
+                left: " + transferedItemLeft + "px;\
+                margin: 0;\
+                padding: 0;\
+                box-sizing: border-box;\
+            }";
+
+            transferedItemStyle.textContent = styleTextContent;
+            document.head.appendChild(transferedItemStyle);
+
+            transferedItem.classList.add("img_" + transferedItemId);
+
+            canvas.appendChild(transferedItem);
+            transferedItem.setAttribute("draggable", "false");
+
+            saveDroppedInCanvasItem(transferedItem.id, transferedItem.src, transferedItemTop, transferedItemLeft, parseInt(event.dataTransfer.getData("imgWidth")), viewerLeftPos, viewerTopPos);
+
+            // addImgToSceneManagement(transferedItem);
+
+            setElementsToSceneManagement(transferedItem.id, "img");
+        });
+
+
+        imgGalleryHeader.addEventListener("click", () => {
+            canvasOuter.style.display = "block";
+            viewerWrapper.style.display = "none";
+
+            editorHeaderWrapper.scrollLeft = 0;
+
+            hideOtherEditors("imgGalleryWrapper");
+
+        });
+
+
+        imgEditorHeader.addEventListener("click", () => {
+            canvasOuter.style.display = "block";
+            viewerWrapper.style.display = "none";
+
+            editorHeaderWrapper.scrollLeft = 0;
+
+            hideOtherEditors("imgEditorWrapper");
+
+        });
+
+        animationEditorHeader.addEventListener("click", () => {
+            canvasOuter.style.display = "block";
+            viewerWrapper.style.display = "none";
+
+            editorHeaderWrapper.scrollLeft = 70;
+
+            hideOtherEditors("animationEditorHeader");
+        });
+
+
+        scrollManagementHeader.addEventListener("click", () => {
+            editorHeaderWrapper.scrollLeft = 70;
+
+            hideOtherEditors("scrollManagementHeader");
+
+            centerIphoneMock();
+
+            canvasOuter.style.display = "none";
+            viewerWrapper.style.display = "block";
+
+            setItemsInViewerWindow();
+        });
+
+
+        function hideOtherEditors(editorName) {
+            if(editorName === "imgGalleryWrapper") {
+                imgEditorWrapper.style.display = "none";
+                animationEditorWrapper.style.display = "none";
+                scrollManagementWrapper.style.display = "none";
+                imgGalleryWrapper.style.display = "block";
+
+                imgEditorHeader.style.backgroundColor = "#f2f2f2";
+                imgEditorHeader.style.color = "#737373";
+
+                animationEditorHeader.style.backgroundColor = "#f2f2f2";
+                animationEditorHeader.style.color = "#737373";
+
+                scrollManagementHeader.style.backgroundColor = "#f2f2f2";
+                scrollManagementHeader.style.color = "#737373";
+
+                imgGalleryHeader.style.backgroundColor = "#ffffff";
+                imgGalleryHeader.style.color = "#404040";
+            }
+
+            if(editorName === "imgEditorWrapper") {
+                imgGalleryWrapper.style.display = "none";
+                animationEditorWrapper.style.display = "none";
+                scrollManagementWrapper.style.display = "none";
+                imgEditorWrapper.style.display = "block";
+
+                imgGalleryHeader.style.backgroundColor = "#f2f2f2";
+                imgGalleryHeader.style.color = "#737373";
+
+                animationEditorHeader.style.backgroundColor = "#f2f2f2";
+                animationEditorHeader.style.color = "#737373";
+
+                scrollManagementHeader.style.backgroundColor = "#f2f2f2";
+                scrollManagementHeader.style.color = "#737373";
+
+                imgEditorHeader.style.backgroundColor = "#ffffff";
+                imgEditorHeader.style.color = "#404040";
+            }
+
+            if(editorName === "animationEditorHeader") {
+                imgGalleryWrapper.style.display = "none";
+                scrollManagementWrapper.style.display = "none";
+                imgEditorWrapper.style.display = "none";
+                animationEditorWrapper.style.display = "block";
+
+                imgEditorHeader.style.backgroundColor = "#f2f2f2";
+                imgEditorHeader.style.color = "#737373";
+
+                imgGalleryHeader.style.backgroundColor = "#f2f2f2";
+                imgGalleryHeader.style.color = "#737373";
+
+                scrollManagementHeader.style.backgroundColor = "#f2f2f2";
+                scrollManagementHeader.style.color = "#737373";
+
+                animationEditorHeader.style.backgroundColor = "#ffffff";
+                animationEditorHeader.style.color = "#404040";
+            }
+
+            if(editorName === "scrollManagementHeader") {
+                imgGalleryWrapper.style.display = "none";
+                imgEditorWrapper.style.display = "none";
+                animationEditorWrapper.style.display = "none";
+                scrollManagementWrapper.style.display = "block";
+
+                scaleToEditor.value = currentScrollMin;
+
+                imgEditorHeader.style.backgroundColor = "#f2f2f2";
+                imgEditorHeader.style.color = "#737373";
+
+                imgGalleryHeader.style.backgroundColor = "#f2f2f2";
+                imgGalleryHeader.style.color = "#737373";
+
+                animationEditorHeader.style.backgroundColor = "#f2f2f2";
+                animationEditorHeader.style.color = "#737373";
+
+                scrollManagementHeader.style.backgroundColor = "#ffffff";
+                scrollManagementHeader.style.color = "#404040";
+            }
+        }
+
+        // Update imgMap for left and top positions
+        function updateImgLeftTopPos(leftPos, topPos, viewerLeftPos, viewerTopPos) {
+            imgMap[targetImg.id].leftPos = leftPos;
+            imgMap[targetImg.id].topPos = topPos;
+            imgMap[targetImg.id].viewerLeftPos = viewerLeftPos;
+            imgMap[targetImg.id].viewerTopPos = viewerTopPos;
+
+        }
+
+
+        // Update imgMap for img width and height
+        function updateImgWidthHeight(itemId, imgWidth, imgHeight) {
+            imgMap[itemId].imgWidth = imgWidth;
+            imgMap[itemId].imgHeight = imgHeight;
+
+        }
+
+
+        // Update imgMap for img rotate
+        function updateImgRotate(itemId, imgRotateVal) {
+            imgMap[itemId].imgRotate = imgRotateVal;
+        }
+
+
+        // Get keys of all children inside "sceneManagement"
+        function getSceneManagementChildren() {
+            const childKeysList = sceneManagement.children;
+            let keysArray = [];
+
+            for(let i = 0; i < childKeysList.length; i++) {
+                keysArray.push(childKeysList[i].id);
+                console.log(childKeysList[i]);
+            }
+
+            return keysArray;
+        }
+
+
+
+
+
+        // Sort by delaySum in ascending order
+        function getAscendingOrderOfImgMapElements() {
+            itemTimerAscendingOrderArray = [];
+
+            for(const key in imgMap) {
+                const hasAnimation = imgMap[key].hasAnimation;
+
+                let delaySum = 0;
+
+                if(hasAnimation) {
+                    delaySum = parseInt(animationMap[key].delayBeforeAppend) + parseInt(animationMap[key].animationDelay);
+                }
+
+                const itemObject = {
+                    key: key,
+                    delaySum: delaySum
+                };
+
+                let indexToSplice = -1;
+
+                for (let i = 0; i < itemTimerAscendingOrderArray.length; i++) {
+                    const arrayObject = itemTimerAscendingOrderArray[i];
+                    if (arrayObject.delaySum > delaySum) {
+                        indexToSplice = i;
+                        break;
+                    }
+                }
+
+                if (indexToSplice === -1) {
+                    itemTimerAscendingOrderArray.push(itemObject);
+                } else {
+                    itemTimerAscendingOrderArray.splice(indexToSplice, 0, itemObject);
+                }
+            }
+
+            return itemTimerAscendingOrderArray;
+        }
+
+
+        // sceneManagement.addEventListener("dragstart", (event) => {
+        //     sceneManagementDragElement = event.target;
+
+        //     log1.innerText = event.target.id;
+        //     log1.innerText = sceneManagementDragElement.parentNode.id;
+        // });
+
+
+        // sceneManagement.addEventListener("dragover", (event) => {
+        //     event.preventDefault();
+        // });
+
+
+        // sceneManagement.addEventListener("drop", (event) => {
+        //     event.preventDefault();
+
+        //     if(sceneManagementDragElement && sceneManagementDragElement !== event.target) {
+        //         const rect = event.target.getBoundingClientRect();
+        //         const dropPosition = event.clientY - rect.top;
+
+        //         // Insert the dragged element at the correct position
+        //         if(dropPosition < sceneManagementDragElement.clientHeight / 2) {
+        //             sceneManagement.insertBefore(sceneManagementDragElement, event.target);
+        //         } else {
+        //             sceneManagement.insertBefore(sceneManagementDragElement, event.target.nextSibling);
+        //         }
+        //     }
+        // });
+
+
+        sceneManagementName.addEventListener("dragstart", (event) => {
+            sceneManagementDragElement = event.target;
+
+            
+            
+        });
+
+
+        sceneManagementName.addEventListener("dragover", (event) => {
+            event.preventDefault();
+        });
+
+
+        sceneManagementName.addEventListener("drop", (event) => {
+            event.preventDefault();
+
+            if(sceneManagementDragElement && sceneManagementName !== event.target) {
+                const rect = event.target.getBoundingClientRect();
+                const dropPosition = event.clientY - rect.top;
+
+                // Insert the dragged item at the correct position
+                if (dropPosition < sceneManagementDragElement.clientHeight / 2) {
+                    sceneManagementName.insertBefore(sceneManagementDragElement, event.target);
+                } else {
+                    sceneManagementName.insertBefore(sceneManagementDragElement, event.target.nextSibling);
+                }
+
+                sceneManagementDragElement = null;
+
+                // Update sceneManagementArray
+                console.log(JSON.stringify(sceneManagementArray));
+                let newSceneManagementArray = [];
+                const itemList = sceneManagementName.children;
+
+                for(let i = 0; i < itemList.length; i++) {
+                    for(let j = 0; j < sceneManagementArray.length; j++) {
+                        if(sceneManagementArray[j].id == itemList[i].id.substring(4)) {
+                            newSceneManagementArray.push(sceneManagementArray[j]);
+                            break;
+                        }
+                    }
+                }
+
+                console.log(JSON.stringify(newSceneManagementArray));
+
+                sceneManagementArray = newSceneManagementArray;
+
+                updateTimelineOrder();
+
+            }
+        });
+
+
+
+        function setElementsToSceneManagement(itemId, elementType) {
+            if(elementType === "img") {
+                const imgMapObject = imgMap[itemId];
+
+                const itemDiv = document.createElement("div");
+                const itemDivId = "smn_" + itemId;
+                itemDiv.setAttribute("id", itemDivId);
+                itemDiv.setAttribute("draggable", "true");
+                itemDiv.classList.add("scene_management_animation_item");
+                itemDiv.setAttribute("data-item-id-in-canvas", itemId);
+                itemDiv.innerText = itemId;
+
+                sceneManagementName.appendChild(itemDiv);
+
+                const animationObject = {
+                    type: "animation",
+                    id: itemId
+                }
+
+                sceneManagementArray.push(animationObject);
+            } else if(elementType === "scroll") {
+                const scrollMapObject = scrollMap[itemId];
+
+                const itemDiv = document.createElement("div");
+                const itemDivId = "smn_" + itemId;
+                itemDiv.setAttribute("id", itemDivId);
+                itemDiv.setAttribute("draggable", "true");
+                itemDiv.classList.add("scene_management_scroll_item");
+                itemDiv.setAttribute("data-item-id-in-canvas", itemId);
+                itemDiv.innerText = itemId;
+
+                sceneManagementName.appendChild(itemDiv);
+            }
+        }
+
+
+        function updateTimelineOrder() {
+            // Remove all children inside sceneManagementTimeline
+            while (sceneManagementTimeline.firstChild) {
+                sceneManagementTimeline.removeChild(sceneManagementTimeline.firstChild);
+            }
+
+            let leftPosSum = 0;
+
+            for(let i = 0; i < sceneManagementArray.length; i++) {
+                const topVal = 19 * i + 1;
+
+                const animationObject = animationMap[sceneManagementArray[i].id];
+
+                if(animationObject !== undefined) {
+                    const itemDiv = document.createElement("div");
+                    const itemDivId = "tl_" + sceneManagementArray[i].id;
+                    itemDiv.setAttribute("id", itemDivId);
+                    itemDiv.style.top = topVal + "px";
+                    itemDiv.style.left = (leftPosSum * 2) + "px";
+
+                    const delayBeforeAppend = animationObject.delayBeforeAppend;
+                    const animationDelay = animationObject.animationDelay;
+                    const animationDuration = animationObject.animationDuration;
+
+                    const spanData1 = document.createElement("span");   // delayBeforeAppend
+                    spanData1.classList.add("delay_before_append_style");
+                    spanData1.style.width = (parseInt(delayBeforeAppend) * 2) + "px";
+                    spanData1.style.top = "0";
+                    spanData1.style.left = "0";
+                    itemDiv.appendChild(spanData1);
+
+                    const spanData2 = document.createElement("span");  // animationDelay
+                    spanData2.classList.add("animation_delay_style");
+                    spanData2.style.width = (parseInt(animationDelay) * 2) + "px";
+                    spanData2.style.top = "0";
+                    spanData2.style.left = spanData1.style.width;
+                    itemDiv.appendChild(spanData2);
+
+                    const spanData3 = document.createElement("span");  // animationDuration
+                    spanData3.classList.add("animation_duration_style");
+                    spanData3.style.width = (parseInt(animationDuration) * 2) + "px";
+                    spanData3.style.top = "0";
+                    spanData3.style.left = parseInt(spanData1.style.width) + parseInt(spanData2.style.width) + "px";
+                    itemDiv.appendChild(spanData3);
+
+                    sceneManagementTimeline.appendChild(itemDiv);
+
+                    const timerSubTotal = parseInt(animationObject.delayBeforeAppend) + parseInt(animationObject.animationDelay) + parseInt(animationObject.animationDuration);
+                    leftPosSum += timerSubTotal;
+                }
+
+            }
+
+        }
+
+
+
+
+        function NotUsing_updateTimelineOrder() {
+            // Remove all children inside sceneManagementTimeline
+            while(sceneManagementTimeline.firstChild) {
+                sceneManagementTimeline.removeChild(sceneManagementTimeline.firstChild);
+            }
+
+            // Iterate sceneManagementArray and create timeline for each item
+            let leftPosSum = 0;
+            for(let i = 0; i < sceneManagementArray.length; i++) {
+                const animationObject = animationMap[sceneManagementArray[i]];
+
+                if(animationObject !== undefined) {
+                    const topVal = 19 * i + 1;
+                    
+                    const itemDiv = document.createElement("div");
+                    const itemDivId = "tl_" + sceneManagementArray[i];
+                    itemDiv.setAttribute("id", itemDivId);
+                    itemDiv.style.top = topVal + "px";
+                    itemDiv.style.left = (leftPosSum * 2) + "px";
+
+                    const delayBeforeAppend = animationObject.delayBeforeAppend;
+                    const animationDelay = animationObject.animationDelay;
+                    const animationDuration = animationObject.animationDuration;
+
+                    const spanData1 = document.createElement("span");   // delayBeforeAppend
+                    spanData1.classList.add("delay_before_append_style");
+                    spanData1.style.width = (parseInt(delayBeforeAppend) * 2) + "px";
+                    spanData1.style.top = "0";
+                    spanData1.style.left = "0";
+                    itemDiv.appendChild(spanData1);
+
+                    const spanData2 = document.createElement("span");  // animationDelay
+                    spanData2.classList.add("animation_delay_style");
+                    spanData2.style.width = (parseInt(animationDelay) * 2) + "px";
+                    spanData2.style.top = "0";
+                    spanData2.style.left = spanData1.style.width;
+                    itemDiv.appendChild(spanData2);
+
+                    const spanData3 = document.createElement("span");  // animationDuration
+                    spanData3.classList.add("animation_duration_style");
+                    spanData3.style.width = (parseInt(animationDuration) * 2) + "px";
+                    spanData3.style.top = "0";
+                    spanData3.style.left = parseInt(spanData1.style.width) + parseInt(spanData2.style.width) + "px";
+                    itemDiv.appendChild(spanData3);
+
+                    sceneManagementTimeline.appendChild(itemDiv);
+
+                    const timerSubTotal = parseInt(animationObject.delayBeforeAppend) + parseInt(animationObject.animationDelay) + parseInt(animationObject.animationDuration);
+                    leftPosSum += timerSubTotal;
+
+                }
+
+                
+            }
+        }
+
+
+        function NotUsing_setTimelineElement(itemId) {
+            let arrayIndex = 0;
+            let topVal = 0;
+            let leftPosSum = 0;
+
+            for(let i = 0; i < sceneManagementArray.length; i++) {
+                if(sceneManagementArray[i] === itemId) {
+                    arrayIndex = i;
+                    break;
+                }
+
+                const animationObject = animationMap[sceneManagementArray[i]];
+                if (animationObject !== undefined) {
+                    const timerSubTotal = parseInt(animationObject.delayBeforeAppend) + parseInt(animationObject.animationDelay) + parseInt(animationObject.animationDuration);
+                    leftPosSum += timerSubTotal;
+                }
+            }
+
+            topVal = 19 * arrayIndex + 1;
+
+            const animationObject = animationMap[itemId];
+
+            if (animationObject !== undefined) {
+                const itemDiv = document.createElement("div");
+                const itemDivId = "tl_" + itemId;
+                itemDiv.setAttribute("id", itemDivId);
+                itemDiv.style.top = topVal + "px";
+                itemDiv.style.left = (leftPosSum * 2) + "px";
+
+                const delayBeforeAppend = animationObject.delayBeforeAppend;
+                const animationDelay = animationObject.animationDelay;
+                const animationDuration = animationObject.animationDuration;
+
+
+                const spanData1 = document.createElement("span");   // delayBeforeAppend
+                spanData1.classList.add("delay_before_append_style");
+                spanData1.style.width = (parseInt(delayBeforeAppend) * 2) + "px";
+                spanData1.style.top = "0";
+                spanData1.style.left = "0";
+                itemDiv.appendChild(spanData1);
+
+                const spanData2 = document.createElement("span");  // animationDelay
+                spanData2.classList.add("animation_delay_style");
+                spanData2.style.width = (parseInt(animationDelay) * 2) + "px";
+                spanData2.style.top = "0";
+                spanData2.style.left = spanData1.style.width;
+                itemDiv.appendChild(spanData2);
+
+                const spanData3 = document.createElement("span");  // animationDuration
+                spanData3.classList.add("animation_duration_style");
+                spanData3.style.width = (parseInt(animationDuration) * 2) + "px";
+                spanData3.style.top = "0";
+                spanData3.style.left = parseInt(spanData1.style.width) + parseInt(spanData2.style.width) + "px";
+                itemDiv.appendChild(spanData3);
+
+                sceneManagementTimeline.appendChild(itemDiv);
+            }
+
+
+        }
+
+
+        
+
+
+        function NotUsing_setTimelineElement(itemId) {
+            const topVal = 19 * (sceneManagementArray.length - 1) + 1;
+
+            // Iterate sceneManagementArray and calculate "left" position.
+            // To prevent calculating "self", subtract 1 from iterator length.
+            let timerTotal = 0;
+            for(let i = 0; i < sceneManagementArray.length - 1; i++) {
+                const animationObject = animationMap[sceneManagementArray[i]];
+                if(animationObject !== undefined) {
+                    const timerSubTotal = parseInt(animationObject.delayBeforeAppend) + parseInt(animationObject.animationDelay) + parseInt(animationObject.animationDuration);
+                    timerTotal += timerSubTotal;
+                }
+            }
+
+            const animationMapObject = animationMap[itemId];
+
+            if(animationMapObject !== undefined) {
+                const itemDiv = document.createElement("div");
+                const itemDivId = "tl_" + itemId;
+                itemDiv.setAttribute("id", itemDivId);
+                itemDiv.style.top = topVal + "px";
+                itemDiv.style.left = (timerTotal * 2) + "px";
+                
+                const delayBeforeAppend = animationMapObject.delayBeforeAppend;
+                const animationDelay = animationMapObject.animationDelay;
+                const animationDuration = animationMapObject.animationDuration;
+
+
+                const spanData1 = document.createElement("span");   // delayBeforeAppend
+                spanData1.classList.add("delay_before_append_style");
+                spanData1.style.width = (parseInt(delayBeforeAppend) * 2) + "px";
+                spanData1.style.top = "0";
+                spanData1.style.left = "0";
+                itemDiv.appendChild(spanData1);
+
+                const spanData2 = document.createElement("span");  // animationDelay
+                spanData2.classList.add("animation_delay_style");
+                spanData2.style.width = (parseInt(animationDelay) * 2) + "px";
+                spanData2.style.top = "0";
+                spanData2.style.left = spanData1.style.width;
+                itemDiv.appendChild(spanData2);
+
+                const spanData3 = document.createElement("span");  // animationDuration
+                spanData3.classList.add("animation_duration_style");
+                spanData3.style.width = (parseInt(animationDuration) * 2) + "px";
+                spanData3.style.top = "0";
+                spanData3.style.left = parseInt(spanData1.style.width) + parseInt(spanData2.style.width) + "px";
+                itemDiv.appendChild(spanData3);
+
+                sceneManagementTimeline.appendChild(itemDiv);
+            }
+        }
+
+
+
+        // Append img item to sceneManagement when the item is dropped in canvas from img gallery.
+        function NotUsing_setElementsToSceneManagement(itemId) {
+
+            const imgMapObject = imgMap[itemId];
+
+            const itemDiv = document.createElement("div");
+            const itemDivId = "scm_" + itemId;     // create a new Id by prepending "scm_" + item.id
+            itemDiv.setAttribute("id", itemDivId);
+            itemDiv.setAttribute("draggable", "true");
+            itemDiv.classList.add("scene_management_element");
+
+            itemDiv.setAttribute("data-item-id-in-canvas", itemId);
+
+            const itemImgTag = document.createElement("img");
+            itemImgTag.src = imgMapObject.imgSrc;
+
+            const itemDetailDiv = document.createElement("div");
+            itemDetailDiv.classList.add("scene_management_item_detail");
+
+            const itemIdDiv = document.createElement("div");
+
+            const displayDelayWrapper = document.createElement("div");
+            const spanDisplayDelayData = document.createElement("span");
+            if (imgMapObject.hasAnimation) {
+                spanDisplayDelayData.innerText = "表示遅延 : " + animationMap[key].delayBeforeAppend + "秒";
+            } else {
+                spanDisplayDelayData.innerText = "表示遅延 : 0秒";
+            }
+            displayDelayWrapper.appendChild(spanDisplayDelayData);
+
+            const animationDelayWrapper = document.createElement("div");
+            const spanAnimationDelayData = document.createElement("span");
+            if (imgMapObject.hasAnimation) {
+                spanAnimationDelayData.innerText = "待機時間 : " + animationMap[key].animationDelay + "秒";
+            } else {
+                spanAnimationDelayData.innerText = "待機時間 : 0秒";
+            }
+
+            animationDelayWrapper.appendChild(spanAnimationDelayData);
+
+            const animationDurationWrapper = document.createElement("div");
+            const spanAnimationDurationData = document.createElement("span");
+            if (imgMapObject.hasAnimation) {
+                spanAnimationDurationData.innerText = "変化時間 : " + animationMap[key].animationDuration + "秒";
+            } else {
+                spanAnimationDurationData.innerText = "変化時間 : 0秒";
+            }
+
+            animationDurationWrapper.appendChild(spanAnimationDurationData);
+
+            itemDetailDiv.appendChild(itemIdDiv);
+            itemDetailDiv.appendChild(displayDelayWrapper);
+            itemDetailDiv.appendChild(animationDelayWrapper);
+            itemDetailDiv.appendChild(animationDurationWrapper);
+
+            itemDiv.appendChild(itemImgTag);
+            itemDiv.appendChild(itemDetailDiv);
+
+            sceneManagement.appendChild(itemDiv);
+
+
+
+            // // Remove all children inside sceneManagement
+            // sceneManagement.innerHTML = "";
+
+            // // const ascendingArray = getAscendingOrderOfImgMapElements();
+            // // const ascendingArray = getSceneManagementChildren();
+
+            // const childKeysList = getSceneManagementChildren();
+
+            // for(let i = 0; i < childKeysList.length; i++) {
+            //     const key = childKeysList[i];
+
+            //     const imgMapObject = imgMap[key];
+
+            //     const itemDiv = document.createElement("div");
+            //     const itemDivId = "scm_" + key;     // create a new Id by prepending "scm_" + item.id
+            //     itemDiv.setAttribute("id", itemDivId);
+            //     itemDiv.classList.add("scene_management_element");
+
+            //     itemDiv.setAttribute("data-item-id-in-canvas", key);
+
+            //     const itemImgTag = document.createElement("img");
+            //     itemImgTag.src = imgMapObject.imgSrc;
+
+            //     const itemDetailDiv = document.createElement("div");
+            //     itemDetailDiv.classList.add("scene_management_item_detail");
+
+            //     const itemIdDiv = document.createElement("div");
+            //     itemIdDiv.innerText = key;
+
+            //     const displayDelayWrapper = document.createElement("div");
+            //     const spanDisplayDelayData = document.createElement("span");
+            //     if(imgMapObject.hasAnimation) {
+            //         spanDisplayDelayData.innerText = "表示遅延 : " + animationMap[key].delayBeforeAppend + "秒";
+            //     } else {
+            //         spanDisplayDelayData.innerText = "表示遅延 : 0秒";
+            //     }
+            //     displayDelayWrapper.appendChild(spanDisplayDelayData);
+
+            //     const animationDelayWrapper = document.createElement("div");
+            //     const spanAnimationDelayData = document.createElement("span");
+            //     if(imgMapObject.hasAnimation) {
+            //         spanAnimationDelayData.innerText = "待機時間 : " + animationMap[key].animationDelay + "秒";    
+            //     } else {
+            //         spanAnimationDelayData.innerText = "待機時間 : 0秒";
+            //     }
+                
+            //     animationDelayWrapper.appendChild(spanAnimationDelayData);
+
+            //     const animationDurationWrapper = document.createElement("div");
+            //     const spanAnimationDurationData = document.createElement("span");
+            //     if(imgMapObject.hasAnimation) {
+            //         spanAnimationDurationData.innerText = "変化時間 : " + animationMap[key].animationDuration + "秒";    
+            //     } else {
+            //         spanAnimationDurationData.innerText = "変化時間 : 0秒";
+            //     }
+                
+            //     animationDurationWrapper.appendChild(spanAnimationDurationData);
+
+            //     itemDetailDiv.appendChild(itemIdDiv);
+            //     itemDetailDiv.appendChild(displayDelayWrapper);
+            //     itemDetailDiv.appendChild(animationDelayWrapper);
+            //     itemDetailDiv.appendChild(animationDurationWrapper);
+
+            //     itemDiv.appendChild(itemImgTag);
+            //     itemDiv.appendChild(itemDetailDiv);
+
+            //     sceneManagement.appendChild(itemDiv);
+            // }
+
+
+
+        }
+
+
+
+
+        // Event listener for "minimizeBtn".
+        // Change the width of "sidebarWrapper" to min.
+        minimizeBtn.addEventListener("click", () => {
+            const currentWidth = parseInt(getComputedStyle(sidebarWrapper).width);
+            
+            if(currentWidth === sidebarWrapperMaximizeWidth) {
+                sidebarWrapper.style.width = sidebarWrapperMinimizeWidth + "px";
+                minimizeBtn.style.display = "none";
+                maximizeBtn.style.display = "block";
+            }
+        });
+
+
+        // Event listener for "maximizeBtn".
+        // Change the width of "sidebarWrapper" to max.
+        maximizeBtn.addEventListener("click", () => {
+            const currentWidth = parseInt(getComputedStyle(sidebarWrapper).width);
+
+            if(currentWidth === sidebarWrapperMinimizeWidth) {
+                sidebarWrapper.style.width = sidebarWrapperMaximizeWidth + "px";
+                maximizeBtn.style.display = "none";
+                minimizeBtn.style.display = "block";
+            }
+        });
+
+        
+        canvasOuter.addEventListener("mousedown", (event) => {
+            let isDraggableImg = true;
+            const eventTargetId = event.target.id;
+            if(eventTargetId == "canvas") {
+                isDraggableImg = false;
+            } else if(eventTargetId.includes("temp")) {
+                isDraggableImg = false;
+            } else if(eventTargetId == "smartphone_window") {
+                isDraggableImg = false;
+            } else if(eventTargetId == "canvas_outer") {
+                isDraggableImg = false;
+            }
+
+            if(isDraggableImg) {
+                // When use clicks on a item.
+                isDraggable = true;
+                if(targetImg != undefined || targetImg != null) {
+                    targetImg.style.border = "none";    // Remove focus border on current targetImg
+                    targetImg.style.zIndex = 1;
+                }
+
+                targetImg = event.target;
+
+                targetImg.zIndex = countAllItemsInCanvas() + 1;
+
+                widthHeightAspectRatio = getAspectRatio();
+
+                targetImg.style.border = "1px solid blue";
+
+                getCurrentRotation();
+
+                mousedownFunction(event);
+            } else {
+                if(targetImg != undefined || targetImg != null) {
+                    targetImg.style.border = "none";
+                    targetImg = undefined;
+                    isDraggable = false;
+                    imgXEditor.value = "";
+                    imgYEditor.value = "";
+                    imgWidthEditor.value = "";
+                    imgHeightEditor.value = "";
+                    imgRotateEditor.value = "";
+
+                    initialScaleEditor.value = "1";
+                    scaleToEditor.value = "";
+                    angleToEditor.value = "";
+                    scaleDelayEditor.value = "";
+                    scaleDurationEditor.value = "";
+                    delayBeforeAppendEditor.value = "";
+                }
+            }
+        });
+
+
+        
+        function mousedownFunction(event) {
+            event.preventDefault();
+
+            console.log("\n");
+            console.log("\n");
+
+            console.log("container Y scrolled: " + container.scrollTop);
+            console.log("container X scrolled: " + container.scrollLeft);
+
+            console.log("smartphoneWindow bounding top: " + smartphoneWindow.getBoundingClientRect().top);
+            console.log("smartphoneWindow computed top: " + parseInt(getComputedStyle(smartphoneWindow).top));
+
+            // 
+            // "container.scrollTop" + "smartphoneWindow bounding top" - 36 = "smartphone computed top" 
+            // 
+
+            const itemsCount = countAllItemsInCanvas();
+            targetImg.style.zIndex = itemsCount;
+
+            // Set item X and Y positions in editor input fields.
+            // Use computedStyle left and top to get values WITHOUT transform(unrendered).
+            imgXEditor.value = parseInt(getComputedStyle(targetImg).left);
+            imgYEditor.value = parseInt(getComputedStyle(targetImg).top);
+
+            // Set item width and height values inside width editor input fields.
+            // OffsetWidth and offsetHeight are used to get values.
+            // These values represent a state without transform values.
+            imgWidthEditor.value = targetImg.offsetWidth;
+            imgHeightEditor.value = targetImg.offsetHeight;
+
+            // Set item rotate angle inside rotate editor from function getCurrentRotation.
+            imgRotateEditor.value = getCurrentRotation();
+
+            // If imgMap has animation set for this targetImg, then set values in each editor.
+            let isFoundInImgMap = false;
+
+            const animationMapObject = animationMap[targetImg.id];
+
+            if(animationMapObject != undefined) {
+                const animationType = animationMapObject.animationType;
+                
+                const initialScale = animationMapObject.initialScale;
+                const initialAngle = animationMapObject.initialAngle;
+                const scaleTo = animationMapObject.scaleTo;
+                const angleTo = animationMapObject.angleTo;
+                const delayBeforeAppend = animationMapObject.delayBeforeAppend;
+                const animationDelay = animationMapObject.animationDelay;
+                const animationDuration = animationMapObject.animationDuration;
+
+                initialScaleEditor.value = initialScale;
+                scaleToEditor.value = scaleTo;
+                angleToEditor.value = angleTo;
+                delayBeforeAppendEditor.value = delayBeforeAppend;
+                scaleDelayEditor.value = animationDelay;
+                scaleDurationEditor.value = animationDuration;
+            } else {
+                initialScaleEditor.value = "1";
+                scaleToEditor.value = "";
+                angleToEditor.value = "";
+                delayBeforeAppendEditor.value = "0";
+                scaleDelayEditor.value = "0";
+                scaleDurationEditor.value = "0";
+            }
+
+
+
+            // for (const key in imgMap) {
+            //     if (key === targetImg.id) {
+            //         isFoundInImgMap = true;
+
+            //         const initialScale = imgMap[targetImg.id].initialScale;
+            //         const initialAngle = imgMap[targetImg.id].initialAngle;
+            //         const scaleTo = imgMap[targetImg.id].scaleTo;
+            //         const angleTo = imgMap[targetImg.id].angleTo;
+            //         const delayBeforeAppend = imgMap[targetImg.id].delayBeforeAppend;
+            //         const animationDelay = imgMap[targetImg.id].animationDelay;
+            //         const animationDuration = imgMap[targetImg.id].animationDuration;
+
+            //         initialScaleEditor.value = initialScale;
+            //         scaleToEditor.value = scaleTo;
+            //         angleToEditor.value = angleTo;
+            //         delayBeforeAppendEditor.value = delayBeforeAppend;
+            //         scaleDelayEditor.value = animationDelay;
+            //         scaleDurationEditor.value = animationDuration;
+            //         break;
+            //     }
+            // }
+
+            // if(!isFoundInImgMap) {
+            //     initialScaleEditor.value = "1";
+            //     scaleToEditor.value = "";
+            //     angleToEditor.value = "";
+            //     delayBeforeAppendEditor.value = "0";
+            //     scaleDelayEditor.value = "0";
+            //     scaleDurationEditor.value = "0";
+            // }
+
+
+
+            // Get mouse X and Y positions.
+            const mouseX = event.clientX / currentZoom;
+            const mouseY = event.clientY / currentZoom;
+
+
+            console.log("mouseY: " + mouseY);
+
+            // The values of targetImgRectX and targetImgRectY represent rendered X and Y positions of 
+            // targetImg in the viewport.
+            // Transformations(rotate) are FACTORED IN the values, thus the values are not equal to 
+            // top and left stated in the stylesheet if rotate is set.
+            const targetImgRenderedLeft = targetImg.getBoundingClientRect().left;
+            const targetImgRenderedTop = targetImg.getBoundingClientRect().top;
+
+            console.log("targetImgRenderedTop: " + targetImgRenderedTop);
+
+            // canvasBoundingLeft and canvasBoundingTop represent X and Y positions of canvas in the viewport.
+            // Add 1 to each value as the width of border around canvas.
+            const canvasBoundingLeft = canvas.getBoundingClientRect().left;
+            const canvasBoundingTop = canvas.getBoundingClientRect().top;
+
+            console.log("canvasBoundingLeft: " + canvasBoundingLeft);
+            console.log("canvasBoundingTop: " + canvasBoundingTop);
+
+
+            // These values represent targetImg left and top positions WITHOUT 
+            // transform factored in, not the rendered values.
+            // The values are equal to top and left stated in the stylesheet.
+            // These values are relative to the wrapper, in this case "canvas".
+            const targetImgCompStyleLeft = parseFloat(getComputedStyle(targetImg).left);
+            const targetImgCompStyleTop = parseFloat(getComputedStyle(targetImg).top);
+
+            console.log("targetImgCompStyleTop: " + targetImgCompStyleTop);
+         
+            // Add canvasBoundingLeft and canvasBoundingTop to get UNRENDERED left and top positions 
+            // of targetImg.
+            // The values do not reflect transformation.
+            const targetImgUnrenderedLeft = targetImgCompStyleLeft + canvasBoundingLeft;
+            const targetImgUnrenderedTop = targetImgCompStyleTop + canvasBoundingTop;
+
+            console.log("targetImgUnrenderedTop: " + targetImgUnrenderedTop);
+
+            // Calculate the offset values of mouse position and rendered targetImg.
+            const mouseOffsetX = mouseX - targetImgRenderedLeft;
+            const mouseOffsetY = mouseY - targetImgRenderedTop;
+
+            console.log("mouseOffsetY: " + mouseOffsetY);
+
+            // Calculate the offset values of unrendered and rendered targetImg.
+            // These values are needed to render items on "mousemove".
+            const renderedOffsetX = targetImgUnrenderedLeft - targetImgRenderedLeft;
+            const renderedOffsetY = targetImgUnrenderedTop - targetImgRenderedTop;
+
+            // Store mouseOffsetX, mouseOffsetY, renderedOffsetX, renderedOffsetY in object.
+            // These values are called in "mousemove" function.
+            offsetObj.mouseOffsetX = mouseOffsetX;
+            offsetObj.mouseOffsetY = mouseOffsetY;
+            offsetObj.renderedOffsetX = renderedOffsetX;
+            offsetObj.renderedOffsetY = renderedOffsetY;
+        }
+
+
+        document.addEventListener("mousemove", (event) => {
+            if(isDraggable) {
+
+                // const diffX = event.clientX - offsetObj.mouseOffsetX - canvasLeft + offsetObj.renderedOffsetX;
+                const diffX = (event.clientX / currentZoom) - canvas.getBoundingClientRect().left - offsetObj.mouseOffsetX + offsetObj.renderedOffsetX;
+                // const diffY = event.clientY - offsetObj.mouseOffsetY - canvasTop + offsetObj.renderedOffsetY;
+                const diffY = (event.clientY / currentZoom) - offsetObj.mouseOffsetY + offsetObj.renderedOffsetY - canvas.getBoundingClientRect().top;
+
+                const viewerLeftPos = diffX - parseInt(getComputedStyle(smartphoneWindow).left);
+                const viewerTopPos = diffY - parseInt(getComputedStyle(smartphoneWindow).top);
+
+
+                updateImgLeftTopPos(diffX, diffY, viewerLeftPos, viewerTopPos);
+                
+
+                targetImg.style.left = diffX + "px";
+                targetImg.style.top = diffY + "px";
+
+                imgXEditor.value = parseInt(getComputedStyle(targetImg).left);
+                imgYEditor.value = parseInt(getComputedStyle(targetImg).top);
+
+
+                // targetImg is at smartphoneWindow left
+                if(parseInt(targetImg.getBoundingClientRect().left) == parseInt(smartphoneWindow.getBoundingClientRect().left)) {
+                    let borderWidth = 1 / currentZoom;
+                    smartphoneWindow.style.borderLeft = borderWidth + "px solid red";
+                } else {
+                    smartphoneWindow.style.borderLeft = "none";
+                }
+
+                // targetImg is at smartphoneWindow right
+                if(parseInt(targetImg.getBoundingClientRect().right) == parseInt(smartphoneWindow.getBoundingClientRect().right)) {
+                    let borderWidth = 1 / currentZoom;
+                    smartphoneWindow.style.borderRight = borderWidth + "px solid red";
+                } else {
+                    smartphoneWindow.style.borderRight = "none";
+                }
+                
+                // targetImg is at smartphoneWindow top
+                if(parseInt(targetImg.getBoundingClientRect().top) == parseInt(smartphoneWindow.getBoundingClientRect().top)) {
+                    let borderWidth = 1 / currentZoom;
+                    smartphoneWindow.style.borderTop = borderWidth + "px solid red";
+                } else {
+                    smartphoneWindow.style.borderTop = "none";
+                }
+
+                // targetImg is at smartphoneWindow bottom
+                if(parseInt(targetImg.getBoundingClientRect().bottom) == parseInt(smartphoneWindow.getBoundingClientRect().bottom)) {
+                    let borderWidth = 1 / currentZoom;
+                    smartphoneWindow.style.borderBottom = borderWidth + "px solid red";
+                } else {
+                    smartphoneWindow.style.borderBottom = "none";
+                }
+
+
+
+                if(targetImg.getBoundingClientRect().left <= canvas.getBoundingClientRect().left) {
+                    dialogBox.style.backgroundColor = "red";
+                    dialogBox.innerText = "ここに画像を配置できません。";
+                } else {
+                    dialogBox.innerText = "";
+                    dialogBox.style.backgroundColor = "#333333";
+                }
+
+
+
+                // targetImg left is outside of canvas.
+                // if(targetImg.getBoundingClientRect().left <= canvas.getBoundingClientRect().left) {
+                //     let a = targetImg.getBoundingClientRect().left;     // rendered
+                //     let b = parseInt(getComputedStyle(targetImg).left) + canvas.getBoundingClientRect().left; // unrendered
+                //     let c = b - a;
+
+                //     targetImg.style.left = (c + 5) + "px";
+
+                // }
+
+                // // targetImg right is outside of canvas.
+                // if(targetImg.getBoundingClientRect().right >= canvas.getBoundingClientRect().right) {
+                //     let a = targetImg.getBoundingClientRect().right;        // rendered
+                //     let b = parseInt(getComputedStyle(targetImg).right) + canvas.getBoundingClientRect().right;
+                //     let c = b - a;
+
+                //     log1.innerText = a;
+                //     log2.innerText = b;
+                //     log3.innerText = c;
+
+
+                //     targetImg.style.right = (c - 5) + "px";
+                // }
+
+                // // targetImg top is outside of canvas.
+                // if(targetImg.getBoundingClientRect().top <= canvas.getBoundingClientRect().top) {
+                //     let a = targetImg.getBoundingClientRect().top;  // rendered
+                //     let b = parseInt(getComputedStyle(targetImg).top) + canvas.getBoundingClientRect().top;     // unrendered
+                //     let c = b - a;
+
+                //     targetImg.style.top = (c + 5) + "px";
+                // }
+
+                // // targetImg bottom is outside of canvas.
+                // if(targetImg.getBoundingClientRect().bottom >= canvas.getBoundingClientRect().bottom) {
+                //     alert("bottom at 0");
+                // }
+
+
+
+                // // Mouse X is outside of canvas left.
+                // if((event.clientX + container.scrollLeft) <= parseInt(getComputedStyle(canvas).left)) {
+                //     isOutsideCanvasLeft = true;
+                //     targetImg.style.left = parseInt(getComputedStyle(canvas).left) + parseInt(offsetObj.renderedOffsetX) + "px";
+                //     isDraggable = false;
+                // }
+
+                // // Mouse X is outside of canvas right.
+                // if((event.clientX + container.scrollLeft) >= parseInt(getComputedStyle(canvas).left) + parseInt(getComputedStyle(canvas).width)) {
+                //     isOutsideCanvasRight = true;
+                //     targetImg.style.left = parseInt(getComputedStyle(canvas).left) + parseInt(getComputedStyle(canvas).width) - targetImg.getBoundingClientRect().width + parseInt(offsetObj.renderedOffsetX) + "px";
+                //     isDraggable = false;
+                // }
+
+                // // Mouse Y is outside of canvas top.
+                // if((event.clientY + container.scrollTop) <= parseInt(getComputedStyle(canvas).top)) {
+                //     isOutsideCanvasTop = true;
+                //     targetImg.style.top = parseInt(getComputedStyle(canvas).top) + parseInt(offsetObj.renderedOffsetY) + "px";
+                //     isDraggable = false;
+                // }
+
+                // // Mouse Y is outside of canvas bottom.
+                // if((event.clientY + container.scrollTop) >= parseInt(getComputedStyle(canvas).top) + parseInt(getComputedStyle(canvas).height) + 36) {
+                //     isOutsideCanvasBottom = true;
+                //     targetImg.style.top = parseInt(getComputedStyle(canvas).top) + parseInt(getComputedStyle(canvas).height) - targetImg.getBoundingClientRect().height + parseInt(offsetObj.renderedOffsetY) + "px";
+                //     isDraggable = false;
+                // }
+
+            }
+        });
+
+
+        document.addEventListener("mouseup", () => {
+            
+            isDraggable = false;
+
+            smartphoneWindow.style.borderLeft = "none";
+            smartphoneWindow.style.borderRight = "none";
+            smartphoneWindow.style.borderTop = "none";
+            smartphoneWindow.style.borderBottom = "none";
+        });
+
+
+        imgXEditor.addEventListener("keydown", (event) => {
+            if(targetImg != undefined) {
+                if(event.keyCode === 13) {
+                    event.preventDefault();
+                    if(imgXEditor.value < xDragMin || imgXEditor.value > xDragMax) {
+                        // Show warning
+
+                    } else {
+                        targetImg.style.left = imgXEditor.value + "px";
+                        targetImg.style.top = imgYEditor.value + "px";
+                    }
+                }
+            }
+        });
+
+
+        imgYEditor.addEventListener("keydown", (event) => {
+            if(targetImg != undefined) {
+                if(event.keyCode === 13) {
+                    event.preventDefault();
+                    if(imgYEditor.value < yDragMin || imgYEditor.value > yDragMax) {
+                        // Show warning
+
+                    } else {
+                        targetImg.style.left = imgXEditor.value + "px";
+                        targetImg.style.top = imgYEditor.value + "px";
+                    }
+                }
+            }
+        });
+
+
+        imgWidthEditor.addEventListener("keydown", (event) => {
+            if(targetImg != undefined) {
+                if(event.keyCode === 13) {
+                    event.preventDefault();
+                    if(widthHeightAspectRatioChecked) {
+                        targetImg.style.width = event.target.value + "px";
+
+                        const newHeight = targetImg.offsetWidth / widthHeightAspectRatio;
+                        targetImg.style.height = newHeight + "px";
+
+                        imgWidthEditor.value = targetImg.offsetWidth;
+                        imgHeightEditor.value = targetImg.offsetHeight;
+                    } else {
+                        targetImg.style.width = event.target.value + "px";
+                        targetImg.style.height = imgHeightEditor.value + "px";
+                    }
+
+                    updateImgWidthHeight(targetImg.id, targetImg.offsetWidth, targetImg.offsetHeight);
+
+                }
+            }
+        });
+
+
+        imgHeightEditor.addEventListener("keydown", (event) => {
+            if(targetImg != undefined) {
+                if(event.keyCode === 13) {
+                    event.preventDefault();
+                    const currentWidth = targetImg.getBoundingClientRect().width;
+                    if(widthHeightAspectRatioChecked) {
+                        targetImg.style.height = event.target.value + "px";
+                        
+                        const newWidth = targetImg.offsetHeight * widthHeightAspectRatio;
+                        targetImg.style.width = newWidth + "px";
+
+                        imgWidthEditor.value = targetImg.offsetWidth;
+                        imgHeightEditor.value = targetImg.offsetHeight;
+                    } else {
+                        targetImg.style.height = event.target.value + "px";
+                        targetImg.style.width = imgWidthEditor.value + "px";
+                    }
+
+                    updateImgWidthHeight(targetImg.id, targetImg.offsetWidth, targetImg.offsetHeight);
+                    
+                }
+            }
+        });
+
+
+        imgRotateEditor.addEventListener("keydown", (event) => {
+            if(targetImg != undefined) {
+                if(event.keyCode === 13) {
+                    if(imgRotateEditor.value >= 0 && imgRotateEditor.value <= 360) {
+                        event.preventDefault();
+                        targetImg.style.transform = "rotate(" + imgRotateEditor.value + "deg)";
+                        updateImgRotate(targetImg.id, parseInt(imgRotateEditor.value));
+                    }
+                }
+            }
+        });
+
+
+        widthHeightCheckbox.addEventListener("click", (event) => {
+            if(!widthHeightAspectRatioChecked) {
+                widthHeightCheckbox.src = "/Users/mii/Desktop/manga/editor_icons/filled_dot.png";
+                widthHeightAspectRatioChecked = true;
+                widthHeightAspectRatio = getAspectRatio();
+            } else {
+                widthHeightCheckbox.src = "/Users/mii/Desktop/manga/editor_icons/empty_dot.png";
+                widthHeightAspectRatioChecked = false;
+            }
+        });
+
+
+        scaleAnimationSaveBtn.addEventListener("click", () => {
+            event.preventDefault();
+
+            if(targetImg != undefined || targetImg != null) {
+                saveScaleAnimation();
+            }
+        });
+
+
+        // Function to save basic info of the item when dropped inside the canvas.
+        function saveDroppedInCanvasItem(itemId, imgSrc, topPos, leftPos, imgWidth, viewerLeftPos, viewerTopPos) {
+            event.preventDefault();
+            
+            imgMap[itemId] = {
+                imgSrc: imgSrc,
+                topPos: topPos,
+                leftPos: leftPos,
+                viewerLeftPos: viewerLeftPos,
+                viewerTopPos: viewerTopPos,
+                imgWidth: imgWidth,
+                imgHeight: "",
+                imgRotate: 0,
+                hasAnimation: false
+            };
+            
+        }
+
+
+        function saveScaleAnimation() {
+            event.preventDefault();
+
+            const topPos = parseFloat(getComputedStyle(targetImg).top);
+            const leftPos = parseFloat(getComputedStyle(targetImg).left);
+            const imgWidth = parseFloat(getComputedStyle(targetImg).width);
+            const imgHeight = parseFloat(getComputedStyle(targetImg).height);
+
+            const initialScale = initialScaleEditor.value;
+            const initialAngle = imgRotateEditor.value;
+            const scaleTo = scaleToEditor.value == "" ? 0 : scaleToEditor.value;
+            const angleTo = angleToEditor.value == "" ? imgRotateEditor.value : angleToEditor.value;
+            const delayBeforeAppend = delayBeforeAppendEditor.value == "" ? 0 : delayBeforeAppendEditor.value;
+            const animationDelay = scaleDelayEditor.value;
+            const animationDuration = scaleDurationEditor.value;
+
+            // Store animation values in imgMap.
+            // If imgMap has object of this targetImg, it will overwrite.
+            // Use targetImg.id as key.
+            imgMap[targetImg.id].hasAnimation = true;
+
+            animationMap[targetImg.id] = {
+                animationType: "scale",
+                hasKeyframes: true,
+                initialScale: initialScale,
+                initialAngle: initialAngle,
+                scaleTo: scaleTo,
+                angleTo: angleTo,
+                delayBeforeAppend: delayBeforeAppend,
+                animationDelay: animationDelay,
+                animationDuration: animationDuration
+            }
+
+            updateTimelineOrder();
+
+            // setTimelineElement(targetImg.id);
+
+            // setElementsToSceneManagement();
+
+            // ==================================================
+            //
+            //  Ajax to backend and save imgMap.
+            //
+            // ==================================================
+
+
+        };
+
+
+        scaleAnimationPreviewBtn.addEventListener("click", (event) => {
+            event.preventDefault();
+
+            if(targetImg != undefined || targetImg != null) {
+                dialogBox.innerText = "";
+                dialogBox.style.backgroundColor = "#333333";
+
+                // Call saveScaleAnimation function to save animation data before preview.
+                saveScaleAnimation();
+
+                imgMapObject = imgMap[targetImg.id];
+
+                animationMapObject = animationMap[targetImg.id];
+                
+
+                const topPos = imgMapObject.topPos;
+                const leftPos = imgMapObject.leftPos;
+                const imgWidth = imgMapObject.imgWidth;
+                const imgHeight = imgMapObject.imgHeight;
+                
+                const initialScale = animationMapObject.initialScale;
+                const initialAngle = animationMapObject.initialAngle;
+                const scaleTo = animationMapObject.scaleTo;
+                const angleTo = animationMapObject.angleTo;
+                const delayBeforeAppend = animationMapObject.delayBeforeAppend;
+                const animationDelay = animationMapObject.animationDelay;
+                const animationDuration = animationMapObject.animationDuration;
+
+                const timeoutTimer = Number(animationDelay) + Number(animationDuration) + Number(delayBeforeAppend) + 2;
+
+                let styleTextContent = ".imgStyle_" + targetImg.id + " {\
+                    position: absolute;\
+                    top: " + topPos + "px;\
+                    left: " + leftPos + "px;\
+                    width: " + imgWidth + "px;\
+                    height: " + imgHeight + "px;\
+                    transform: rotate(" + initialAngle + "deg);\
+                    margin: 0;\
+                    padding: 0;\
+                    animation: scaleAnimation " + animationDuration + "s ease-in " + animationDelay + "s forwards;\
+                }";
+
+                styleTextContent += "\
+                    @keyframes scaleAnimation {\
+                        from {\
+                            transform: rotate(" + initialAngle + "deg) scale(" + initialScale + ");\
+                        }\
+                        to {\
+                            transform: rotate(" + angleTo + "deg) scale(" + scaleTo + ");\
+                        }\
+                    }\
+                ";
+
+                const styleElement = document.createElement("style");
+                styleElement.type = "text/css";
+                styleElement.id = "stylesheet_id_" + targetImg.id;
+
+                // Remove styleElement from head if styleElement of the same ID exists.
+                const oldStyleElement = document.getElementById(styleElement.id);
+                if(oldStyleElement) {
+                    document.head.removeChild(oldStyleElement);
+                }
+
+                // Remove existing "preview" element in canvas.
+                removeAnimationPreviewFromCanvas();
+
+                styleElement.textContent = styleTextContent;
+                document.head.appendChild(styleElement);
+
+                // Create "img" element.
+                // Use classname set in styleTextContent.
+                const tempImgNode = document.createElement("img");
+                const tempImgNodeId = "temp_img_id_" + targetImg.id;
+                tempImgNode.setAttribute("id", tempImgNodeId);
+                tempImgNode.classList.add("imgStyle_" + targetImg.id);
+                tempImgNode.src = targetImg.src;
+
+                targetImg.style.display = "none";
+
+                // Appending "tempItemNode" to canvas starts animation preview.
+                setTimeout(() => {
+                    canvas.appendChild(tempImgNode);
+                }, delayBeforeAppend * 1000);
+
+                // Remove "preview" element after animation is done.
+                setTimeout(() => {
+                    canvas.removeChild(tempImgNode);
+                    targetImg.style.display = "block";
+                }, timeoutTimer * 1000);
+            } else {
+                dialogBox.innerText = "画像を選択してください。";
+                dialogBox.style.backgroundColor = "#eb4034";
+            }
+
+        });
+
+
+        function removeAnimationPreviewFromCanvas() {
+            const canvasChildren = canvas.children;
+            let originalTargetImgId = null;
+
+            for(let i = 0; i < canvasChildren.length; i++) {
+                console.log(canvasChildren[i].id);
+                if(canvasChildren[i].id.includes("temp")) {
+                    originalTargetImgId = canvasChildren[i].id.substring("temp_div_id_".length);
+                    canvas.removeChild(canvasChildren[i]);
+                    break;
+                }
+            }
+
+            return originalTargetImgId;
+        }
+
+
+        // Return number of items in canvas.
+        function countAllItemsInCanvas() {
+            const allItems = canvas.children;
+            return allItems.length;
+        }
+
+
+        function getCurrentRotation() {
+            const computedStyle = window.getComputedStyle(targetImg);
+            const transformVal = computedStyle.getPropertyValue("transform");
+            const matrix = new DOMMatrix(transformVal);
+            const rotateDeg = Math.atan2(matrix.b, matrix.a) * (180 / Math.PI);
+            
+            return Math.ceil(rotateDeg);
+        }
+
+
+        // Calculate and return the value of targetImg aspect ratio.
+        function getAspectRatio() {
+            const aspectRatio = targetImg.offsetWidth / targetImg.offsetHeight;
+            return aspectRatio;
+        }
+
+
+        // Get browser width and height.
+        function getBrowserSize() {
+            browserWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+            browserHeight = window.innerHeight || document.documentElement.clientHeight || document.bod.clientHeight;
+        }
+
+
+        // Center iphone mock inside viewer_wrapper.
+        // Center viewerWindow inside iphone mock.
+        function centerIphoneMock() {
+            const iphoneMockLeftPos = (browserWidth - 286) / 2;
+            iphoneMock.style.left = iphoneMockLeftPos + "px";
+
+            const iphoneCameraLeftPos = (browserWidth - 65.8) / 2;
+            iphoneInsideCamera.style.left = iphoneCameraLeftPos + "px";
+
+            const viewerWindowLeftPos = (browserWidth - 270) / 2;
+            viewerWindow.style.left = viewerWindowLeftPos + "px";
+        }
+
+
+        // Get items from imgMap and display in viewerWindow;
+        function setItemsInViewerWindow() {
+            console.log(JSON.stringify(imgMap));
+            for(const key in imgMap) {
+                const imgMapObject = imgMap[key];
+                const imgSrc = imgMapObject.imgSrc;
+                const leftPos = imgMapObject.viewerLeftPos;
+                const topPos = imgMapObject.viewerTopPos;
+                const imgWidth = imgMapObject.imgWidth;
+                const imgHeight = imgMapObject.imgHeight;
+
+                const imgElement = document.createElement("img");
+                imgElement.setAttribute("id", key);
+                imgElement.src = imgSrc;
+
+                const imgElementStyle = document.createElement("style");
+                imgElementStyle.type = "text/css";
+                imgElementStyle.id = "stylesheet_" + key;
+
+                let styleTextContent;
+                
+                if(imgHeight == "") {
+                    // Create style text content for img without set height
+                    styleTextContent = ".img_" + key + " {\
+                        position: absolute;\
+                        width: " + imgWidth + "px;\
+                        top: " + topPos + "px;\
+                        left: " + leftPos + "px;\
+                        margin: 0;\
+                        padding: 0;\
+                    }";
+                } else {
+                    // Create style text content for img with set height
+                    styleTextContent = ".img_" + key + " {\
+                        position: absolute;\
+                        width: " + imgWidth + "px;\
+                        height: " + imgHeight + "px;\
+                        top: " + topPos + "px;\
+                        left: " + leftPos + "px;\
+                        margin: 0;\
+                        padding: 0;\
+                    }";
+                }
+
+                imgElementStyle.textContent = styleTextContent;
+                document.head.appendChild(imgElementStyle);
+
+                imgElement.classList.add("img_" + key);
+
+                viewerWindow.appendChild(imgElement);
+
+
+                
+            }
+
+
+
+        }
+
+
+
+
+        // Set width and height of "container".
+        function setContainerSize() {
+            if(browserWidth > containerWidthMin) {
+                container.style.width = browserWidth + "px";
+            }
+
+            if(browserHeight > containerHeightMin) {
+                container.style.height = browserHeight - 70 + "px";
+            }
+        }
+
+
+        // Set width and height of "canvas".
+        function setCanvasSize() {
+            // if(browserWidth > containerWidthMin) {
+            //     canvas.style.width = browserWidth + "px";
+            // }
+
+            // if(browserHeight > containerHeightMin) {
+            //     canvas.style.height = browserHeight - 70 + "px";
+            // }
+        }
+
+        function setDialogBoxPosition() {
+            dialogBox.style.top = (container.getBoundingClientRect().bottom - headerHeight) + "px";
+            const containerWidth = container.getBoundingClientRect().width;
+            const dialogBoxWidth = parseInt(getComputedStyle(dialogBox).width);
+            const dialogBoxLeft = (containerWidth - dialogBoxWidth) / 2;
+            dialogBox.style.left = dialogBoxLeft + "px";
+        }
+
+
+        function setZoomBtnWrapperPosition() {
+            zoomBtnWrapper.style.top = (container.getBoundingClientRect().bottom - 30) + "px";
+            
+            zoomBtnWrapper.style.left = (container.getBoundingClientRect().width - 100) + "px";
+        }
+
+        zoomInBtn.addEventListener("click", () => {
+            if(currentZoom < 3) {
+                
+                const originY = (Math.abs(canvas.getBoundingClientRect().top) + (browserHeight / 2)) / currentZoom;
+
+                currentZoom += 0.5;
+                canvas.style.transformOrigin = "50% " + originY + "px";
+                canvas.style.transform = "scale(" + currentZoom + ")";
+            }
+        });
+
+        zoomOutBtn.addEventListener("click", () => {
+            if(currentZoom > 0.5) {
+                
+                const originY = (Math.abs(canvas.getBoundingClientRect().top) + (browserHeight / 2)) / currentZoom;
+
+                currentZoom -= 0.5;
+                canvas.style.transformOrigin = "50% " + originY + "px";
+                canvas.style.transform = "scale(" + currentZoom + ")";
+                
+            }
+
+        });
+
+
+        function setSmartphoneWindowPosition() {
+            const smartphoneWindowWidth = 270;
+            const smartphoneWindowHeight = 1000;
+
+            smartphoneWindowLeft = (canvasWidth / 2) - (smartphoneWindowWidth / 2);
+
+            smartphoneWindow.style.left = smartphoneWindowLeft + "px";
+        }
+
+
+
+
+
+        function NotUsing_setSmartphoneWindowPosition() {
+            smartphoneWindowWidth = parseInt(getComputedStyle(smartphoneWindow).width);
+            smartphoneWindowHeight = smartphoneWindowWidth * iphoneAspectRatio;
+
+            smartphoneWindowTop = 1000;
+            smartphoneWindowLeft = (canvasWidth / 2) - (smartphoneWindowWidth / 2);
+
+            smartphoneWindow.style.top = smartphoneWindowTop + "px";
+            smartphoneWindow.style.left = smartphoneWindowLeft + "px";
+
+
+
+            // let smartphoneWindowWidth = parseInt(getComputedStyle(smartphoneWindow).width);
+            // console.log("smartphoneWindowWidth: " + smartphoneWindowWidth);
+            // const leftPos = (browserWidth - smartphoneWindowWidth) / 2;
+            // smartphoneWindow.style.left = leftPos + "px";
+            // smartphoneWindow.style.top = "50px";
+
+            // smartphoneWindowLeft = parseInt(getComputedStyle(smartphoneWindow).left);
+            // smartphoneWindowRight = smartphoneWindowLeft + parseInt(getComputedStyle(smartphoneWindow).width);
+            // smartphoneWindowTop = parseInt(getComputedStyle(smartphoneWindow).top) + 35;
+            // smartphoneWindowBottom = smartphoneWindowTop + parseInt(getComputedStyle(smartphoneWindow).height);
+
+        }
+
+
+        // Set left position of "dialog_box".
+        function setDialogBoxLeft() {
+            const dialogBoxWidth = parseInt(getComputedStyle(dialogBox).width);
+            const canvasWidth = parseInt(getComputedStyle(canvas).width);
+            const dialogBoxLeft = (canvasWidth - dialogBoxWidth) / 2;
+            dialogBox.style.left = dialogBoxLeft + "px";
+        }
+        
+
+    </script>
+    
+</body>
+</html>
