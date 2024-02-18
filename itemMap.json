@@ -45,7 +45,6 @@
       "imgHeight": 350,
       "delayBeforeAppend": 0,
       "hasAnimation": true,
-      "hasKeyFrames": false,
       "allowOverlap": true,
       "animationType": "scaleUp",
       "initialScale": 1,
