@@ -38,7 +38,7 @@
 			"leftPos":35,
 			"imgSrc":"male_3.jpeg",
 			"imgWidth":200,
-			"imgHeight":"",
+			"imgHeight":355,
 			"imgRotate":0,
 			"hasAnimation":true,
 			"delayBeforeAppend":1000,
@@ -58,7 +58,7 @@
 			"leftPos":34,
 			"imgSrc":"male_5.jpeg",
 			"imgWidth":200,
-			"imgHeight":"",
+			"imgHeight":340,
 			"imgRotate":0,
 			"hasAnimation":false
 		}
@@ -70,7 +70,7 @@
 			"leftPos":29,
 			"imgSrc":"male_7.jpeg",
 			"imgWidth":200,
-			"imgHeight":"",
+			"imgHeight":177,
 			"imgRotate":0,
 			"hasAnimation":true,
 			"delayBeforeAppend":1000,
