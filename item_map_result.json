@@ -1,0 +1,103 @@
+{
+	"sceneId_0":[
+		{
+			"itemId":"dropped_cloned_1708244287461_cover",
+			"topPos":259,
+			"leftPos":32,
+			"imgSrc":"file:///Users/mii/Desktop/manga/demo_img/assets/cover_page.png",
+			"imgWidth":200,
+			"imgHeight":"",
+			"imgRotate":0,
+			"hasAnimation":false
+		}
+	],
+	"sceneId_1":[
+		{
+			"itemId":"dropped_cloned_1708244300725_male_1",
+			"topPos":773,
+			"leftPos":31,
+			"imgSrc":"file:///Users/mii/Desktop/manga/demo_img/assets/male_1.jpeg",
+			"imgWidth":200,
+			"imgHeight":"",
+			"imgRotate":0,
+			"hasAnimation":true,
+			"delayBeforeAppend":1000,
+			"allowOverlap":false,
+			"animationType":"scale",
+			"initialScale":1,
+			"scaleTo":"2",
+			"angleTo":"45",
+			"animationDelay":2000,
+			"animationDuration":3000
+		}
+	],
+	"sceneId_2":[
+		{
+			"itemId":"dropped_cloned_1708244305957_male_3",
+			"topPos":1375,
+			"leftPos":35,
+			"imgSrc":"file:///Users/mii/Desktop/manga/demo_img/assets/male_3.jpeg",
+			"imgWidth":200,
+			"imgHeight":"",
+			"imgRotate":0,
+			"hasAnimation":true,
+			"delayBeforeAppend":1000,
+			"allowOverlap":false,
+			"animationType":"scale",
+			"initialScale":1,
+			"scaleTo":"2",
+			"angleTo":"0",
+			"animationDelay":2000,
+			"animationDuration":3000
+		}
+	],
+	"sceneId_3":[
+		{
+			"itemId":"dropped_cloned_1708244310458_male_5",
+			"topPos":2024,
+			"leftPos":34,
+			"imgSrc":"file:///Users/mii/Desktop/manga/demo_img/assets/male_5.jpeg",
+			"imgWidth":200,
+			"imgHeight":"",
+			"imgRotate":0,
+			"hasAnimation":false
+		}
+	],
+	"sceneId_4":[
+		{
+			"itemId":"dropped_cloned_1708244316723_male_7",
+			"topPos":2773,
+			"leftPos":29,
+			"imgSrc":"file:///Users/mii/Desktop/manga/demo_img/assets/male_7.jpeg",
+			"imgWidth":200,
+			"imgHeight":"",
+			"imgRotate":0,
+			"hasAnimation":true,
+			"delayBeforeAppend":1000,
+			"allowOverlap":false,
+			"animationType":"scale",
+			"initialScale":1,
+			"scaleTo":"2",
+			"angleTo":"45",
+			"animationDelay":2000,
+			"animationDuration":3000
+		}
+	]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
