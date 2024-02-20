@@ -1,14 +1,1 @@
-{
-	"sceneId_0":[
-		{
-			"itemId":"dropped_cloned_1708402318715_cover",
-			"topPos":204,
-			"leftPos":27,
-			"imgSrc":"cover_page.png",
-			"imgWidth":200,
-			"imgHeight":"",
-			"imgRotate":0,
-			"hasAnimation":false
-		}
-	],
-	"sceneId_1":[{"itemId":"dropped_cloned_1708402324322_male_3","topPos":601,"leftPos":38,"imgSrc":"male_3.jpeg","imgWidth":200,"imgHeight":"","imgRotate":0,"hasAnimation":false}],"sceneId_2":[{"itemId":"dropped_cloned_1708402328971_male_7","topPos":1387,"leftPos":29,"imgSrc":"male_7.jpeg","imgWidth":200,"imgHeight":"","imgRotate":0,"hasAnimation":false}]}
+{"sceneId_0":[{"itemId":"dropped_cloned_1708404315063_cover","topPos":217,"leftPos":31,"imgSrc":"file:///Users/mii/Desktop/manga/demo_img/assets/cover_page.png","imgWidth":200,"imgHeight":"","imgRotate":0,"hasAnimation":false}],"sceneId_1":[{"itemId":"dropped_cloned_1708404322943_male_2","topPos":555,"leftPos":67,"imgSrc":"file:///Users/mii/Desktop/manga/demo_img/assets/male_2.jpeg","imgWidth":100,"imgHeight":"","imgRotate":0,"hasAnimation":false}],"sceneId_2":[{"itemId":"dropped_cloned_1708404326468_male_4","topPos":1016,"leftPos":75,"imgSrc":"file:///Users/mii/Desktop/manga/demo_img/assets/male_4.jpeg","imgWidth":100,"imgHeight":"","imgRotate":0,"hasAnimation":false}]}
