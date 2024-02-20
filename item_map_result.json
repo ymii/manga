@@ -1,1 +1,14 @@
-{"sceneId_0":[{"itemId":"dropped_cloned_1708402318715_cover","topPos":204,"leftPos":27,"imgSrc":"cover_page.png","imgWidth":200,"imgHeight":"","imgRotate":0,"hasAnimation":false}],"sceneId_1":[{"itemId":"dropped_cloned_1708402324322_male_3","topPos":601,"leftPos":38,"imgSrc":"male_3.jpeg","imgWidth":200,"imgHeight":"","imgRotate":0,"hasAnimation":false}],"sceneId_2":[{"itemId":"dropped_cloned_1708402328971_male_7","topPos":1387,"leftPos":29,"imgSrc":"male_7.jpeg","imgWidth":200,"imgHeight":"","imgRotate":0,"hasAnimation":false}]}
+{
+	"sceneId_0":[
+		{
+			"itemId":"dropped_cloned_1708402318715_cover",
+			"topPos":204,
+			"leftPos":27,
+			"imgSrc":"cover_page.png",
+			"imgWidth":200,
+			"imgHeight":"",
+			"imgRotate":0,
+			"hasAnimation":false
+		}
+	],
+	"sceneId_1":[{"itemId":"dropped_cloned_1708402324322_male_3","topPos":601,"leftPos":38,"imgSrc":"male_3.jpeg","imgWidth":200,"imgHeight":"","imgRotate":0,"hasAnimation":false}],"sceneId_2":[{"itemId":"dropped_cloned_1708402328971_male_7","topPos":1387,"leftPos":29,"imgSrc":"male_7.jpeg","imgWidth":200,"imgHeight":"","imgRotate":0,"hasAnimation":false}]}
